@@ -1,1 +1,2 @@
-Afroditi , Athens , Kassandrou 12 , 30
+|    Name    |    Location    |       Street       |   Price   | 
+  Afroditi   ,    Athens      ,    Kassandrou_12   ,    30     ,

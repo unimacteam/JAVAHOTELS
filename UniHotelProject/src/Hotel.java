@@ -23,7 +23,7 @@ public class Hotel {
 	}
 	
 	public double GetAverageRating() {
-		
+		//cR = countRate
 		double cR = 0, aR = 0;
 		
 		for(Integer r :ratings) {

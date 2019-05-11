@@ -8,7 +8,7 @@ public class Server {
 		
 		String file = "FilesServer/Hotels.txt";
 		
-		try {
+		try { 
 			
 			FileReader fr = new FileReader(file);
 			BufferedReader reader = new BufferedReader(fr);

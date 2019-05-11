@@ -47,7 +47,7 @@ public class Server {
 		line = line.replaceAll(name + ",", "");
 			
 		location = line.substring(0, line.indexOf(","));
-		line = line.replaceAll(location + ",", "");
+		line = line.replaceAll(location + ",", ""); 
 			
 		street = line.substring(0, line.indexOf(","));
 		line = line.replaceAll(street + ",", "");

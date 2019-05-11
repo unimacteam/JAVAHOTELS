@@ -1,9 +1,40 @@
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 public class Hotel {
 
-	//private 
+	private String name = "";
+	private String location = "";
+	private String street = "";
+	private double price = 0;
+	private ArrayList<Integer> ratings = new ArrayList<>();
 	
-	public Hotel() {
+	public Hotel(String name, String location, String street, double price) {
 		
+		this.name = name;
+		this.location = location;
+		this.street = street;
+		this.price = price;
+	}
+	
+	public void PushRating(int rate) {
+		
+		ratings.add(rate);
+	}
+	
+	public double GetAverageRating() {
+		
+		double cR = 0, aR = 0;
+		
+		for(Integer r :ratings) {
+			
+			cR += r;
+		}
+		
+		aR = cR / ratings.size();
+		String txt = new DecimalFormat("##.#").format(aR);
+		aR = Double.parseDouble(txt);
+		
+		return aR;
 	}
 }

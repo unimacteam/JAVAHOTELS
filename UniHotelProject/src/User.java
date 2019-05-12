@@ -14,8 +14,7 @@ public class User {
 		
 		hotelList.add(h);
 	}
-	
-	
+
 	
 	public void SignUp(ArrayList<User> users)
 	{	
@@ -122,7 +121,10 @@ public class User {
 		this.surname = surname;
 	}
 	
-	
 }
+
+
+
+
 
 

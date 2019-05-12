@@ -17,11 +17,31 @@ public class Hotel {
 		this.price = price;
 	}
 	
+	public String getName() {
+		return name;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public ArrayList<Integer> getRatings() {
+		return ratings;
+	}
+	
 	public void PushRating(int rate) {
 		
 		ratings.add(rate);
 	}
-	
+
 	public double GetAverageRating() {
 		//cR = countRate
 		double cR = 0, aR = 0;

@@ -1,0 +1,2 @@
+|    Userame    |    Password    |       Name       |       LastName       |            Email            |
+      Zeles     ,     fried      ,    Alexandros    ,     Papadopoulos     ,      dai22022@uom.edu.gr    ,

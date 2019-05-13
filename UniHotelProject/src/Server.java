@@ -65,6 +65,9 @@ public class Server {
 			
 			e.printStackTrace();
 		}
+		
+		//SCREENS MANAGEMENT
+		new MainScreenGUI(hotels, users);
 	}
 	
 	public void CreateHotels(String line) {

@@ -8,11 +8,11 @@ public class Main {
 		
 		Server s = new Server();
 	
-		hotels = s.GetHotelsList();
+		/*hotels = s.GetHotelsList();
 	
 		for(Hotel h :hotels) {
 			
 			System.out.println(h.getName());
-		}
+		}*/
 	}
 }

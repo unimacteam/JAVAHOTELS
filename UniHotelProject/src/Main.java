@@ -14,5 +14,10 @@ public class Main {
 			
 			System.out.println(h.getName());
 		}*/
+		
+		
+		
+		//users and active users array needed, active users can be created on launch. Use // to run main without this.
+		//LogInForm logInForm = new LogInForm(users, activeUsers);
 	}
 }

@@ -65,7 +65,7 @@ public class MainScreenGUI extends JFrame {
 	
 		JScrollPane scrollPaneShwR = new JScrollPane(shwRPanel);
 		scrollPaneShwR.setBackground(Color.BLACK);
-		scrollPaneShwR.setPreferredSize(new Dimension(shwRPanel.getWidth(), shwRPanel.getHeight()));
+		scrollPaneShwR.setPreferredSize(new Dimension(1000, 500));
 		mainPanel.add(scrollPaneShwR);
 		
 		for(Hotel h :hotels) {

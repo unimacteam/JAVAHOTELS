@@ -41,7 +41,7 @@ public class Hotel {
 		
 		ratings.add(rate);
 	}
-
+	
 	public double GetAverageRating() {
 		//cR = countRate
 		double cR = 0, aR = 0;

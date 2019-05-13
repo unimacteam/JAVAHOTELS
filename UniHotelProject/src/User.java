@@ -10,51 +10,25 @@ public class User {
 	
 	private ArrayList<Hotel> hotelList = new ArrayList<>();
 
+	
+	
+	public User(String userName, String passCode, String email, String name, String surname) {
+		
+		this.userName = userName;
+		this.passCode = passCode;
+		this.email = email;
+		this.name = name;
+		this.surname = surname;
+	}
+
+	
+	
+	
 	public void PushHotelListInUser(Hotel h) {
 		
 		hotelList.add(h);
 	}
 
-	
-	public void SignUp(ArrayList<User> users)
-	{	
-		//while attempting to sign up
-		while (true)
-		{
-			SignUpForm signUpForm = new SignUpForm();
-			
-			//check if username or email are in use
-			boolean inUse = false;
-			
-			for (User u: users)
-			{
-				if (signUpForm.getUserName().equals(u.getUserName()))
-					{
-					signUpForm.InUsePopUp("Username");
-					inUse = true;
-					break;
-					}
-				else if (signUpForm.getEmail().equals(u.getEmail()))
-					{
-					signUpForm.InUsePopUp("E-mail");
-					inUse = true;
-					break;
-					}
-			
-			}
-			
-			if (!inUse)
-				{
-				userName = signUpForm.getUserName();
-				passCode = signUpForm.getPassCode();
-				email = signUpForm.getEmail();
-				name = signUpForm.getName();
-				surname = signUpForm.getSurname();
-				users.add(this);
-				break;
-				}
-		}
-	}
 	
 	public void LogIn(ArrayList<User> users)
 	{

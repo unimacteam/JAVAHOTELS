@@ -1,10 +1,11 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
 //GUI, might want to change
-//source: https://github.com/mitchtabian/JavaTutorial10/blob/master/SignUpForm.java
+//source: https://github.com/mitchtabian/JavaTutorial10/blob/master/this.java
 public class SignUpForm {
 	private JFrame signUpFrame = new JFrame("Sign Up");
 	private String userName = "";
@@ -13,35 +14,44 @@ public class SignUpForm {
 	private String name = "";
 	private String surname = "";
 	
+	ArrayList<User> users;
+	ArrayList<User> activeUsers;
+	
 	private JLabel logo = new JLabel("Sign Up:");
+	private JLabel haveAnAccountL = new JLabel ("Already have an account?");
+	
 	private JLabel usernameL = new JLabel("Username:");
 	private JLabel passwordL = new JLabel("Password:");
 	private JLabel emailL = new JLabel("E-Mail:");
 	private JLabel nameL = new JLabel("Name:");
 	private JLabel surnameL = new JLabel("Family name:");
+	
 	private JTextField usernameT = new JTextField();
 	private JTextField passwordT = new JTextField();
 	private JTextField emailT = new JTextField("e.g. someone@somemail.com");
 	private JTextField nameT = new JTextField("e.g. John");
 	private JTextField surnameT = new JTextField("e.g. Doe");
+	
+	private JButton	haveAnAccountBtn = new JButton("Log In");
 	private JButton SignUpBtn = new JButton("Complete Registration");
 
 
 
-	public SignUpForm() {
+	public SignUpForm(ArrayList<User> users, ArrayList<User> activeUsers) {
 		
-		signUpFrame.setBounds(200,100,400,200);
+		this.users = users;
+		this.activeUsers = activeUsers;
+		
+		signUpFrame.setBounds(200,100,400,350);
 		
 		Container container = signUpFrame.getContentPane();
 		container.setLayout(null);
 		
 	
 		
-	
-		logo.setBounds(60, 5, 250, 30);
-		
 		//Label bounds
-	
+		logo.setBounds(180, 5, 250, 30);
+		
 		usernameL.setBounds(20, 30, 250, 30);
 		
 		passwordL.setBounds(20, 60, 250, 30);
@@ -55,28 +65,32 @@ public class SignUpForm {
 
 		surnameL.setBounds(20, 150, 250, 30);
 		
+		haveAnAccountL.setBounds(150, 210, 250, 30);
 		//TextField bounds
 		
 		
-		usernameT.setBounds(65, 30, 250, 30);
+		usernameT.setBounds(100, 30, 250, 30);
 		
 	
-		passwordT.setBounds(65, 60, 250, 30);
+		passwordT.setBounds(100, 60, 250, 30);
 		
-		emailT.setBounds(65, 90, 250, 30);
+		emailT.setBounds(100, 90, 250, 30);
 		
-		nameT.setBounds(65, 120, 250, 30);
+		nameT.setBounds(100, 120, 250, 30);
 		
-		surnameT.setBounds(65, 150, 250, 30);
+		surnameT.setBounds(100, 150, 250, 30);
 		
 		//JButton bounds
-		SignUpBtn.setBounds(150,180,100,30);
+		SignUpBtn.setBounds(120,180,200,30);
+		haveAnAccountBtn.setBounds(120,240,200,30);
 		
-		
-		//button listener
+		//button listeners
 		
 		SignUpButtonListener listener = new SignUpButtonListener();
 		SignUpBtn.addActionListener(listener);
+		HaveAnAccountButtonListener listener2 = new HaveAnAccountButtonListener();
+		haveAnAccountBtn.addActionListener(listener2);
+		
 		
 		
 		//add to container
@@ -92,6 +106,8 @@ public class SignUpForm {
 		container.add(nameT);
 		container.add(surnameT);
 		container.add(SignUpBtn);
+		container.add(haveAnAccountL);
+		container.add(haveAnAccountBtn);
 		
 	
 	signUpFrame.setVisible(true);
@@ -99,10 +115,7 @@ public class SignUpForm {
 	signUpFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	public void InUsePopUp(String element){
-		JOptionPane.showMessageDialog(signUpFrame, element + " already in use!");
-		
-	}
+
 	
 	public String getUserName() {
 		return userName;
@@ -123,6 +136,7 @@ public class SignUpForm {
 	public String getSurname() {
 		return surname;
 	}
+	
 
 	class SignUpButtonListener implements ActionListener
 	{
@@ -133,8 +147,75 @@ public class SignUpForm {
 			email = emailT.getText();
 			name = nameT.getText();
 			surname = surnameT.getText();
+			this.SignUp(users);
+		
+			signUpFrame.setVisible(false);
+			signUpFrame.dispose();
+			
+		}
+		
+		
+	public void SignUp(ArrayList<User> users)
+		{	
+			boolean inUse = false;
+			
+			//while attempting to sign up
+			
+			
+			
+				
+				//check if username or email are in use
+				
+				
+				for (User u: users)
+				{
+					if (userName.equals(u.getUserName()))
+						{
+						this.UsernameInUsePopUp();
+						usernameT.setText("");
+						inUse = true;
+						break;
+						}
+					else if (email.equals(u.getEmail()))
+						{
+						this.EmailInUsePopUp();
+						emailT.setText("");
+						inUse = true;
+						break;
+						}
+				
+				}
+				//if everything ok, register new user
+				if (!inUse)
+					{
+					User newUser = new User(userName,passCode, email, name,surname); 
+					users.add(newUser);
+					JOptionPane.showMessageDialog(signUpFrame, "Sign Up successful!");
+					}	
+				
+			}
+	public void UsernameInUsePopUp(){
+		if(!(usernameT.getText()==""))
+		{	JOptionPane.showMessageDialog(null, "Username already in use!");
+			}
+		
+	}
+	public void EmailInUsePopUp(){
+		if(!(emailT.getText()==""))
+		{
+		JOptionPane.showMessageDialog(null, "Email already in use!");
+	
+		}
+	}
+	}
+	class HaveAnAccountButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e) {
+			
+			new LogInForm(users, activeUsers);
+			signUpFrame.setVisible(false);
+			signUpFrame.dispose();
 		}
 	}
 }
-
 

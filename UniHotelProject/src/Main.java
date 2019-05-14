@@ -18,6 +18,6 @@ public class Main {
 		
 		
 		//users and active users array needed, active users can be created on launch. Use // to run main without this.
-		//LogInForm logInForm = new LogInForm(users, activeUsers);
+		LogInForm logInForm = new LogInForm(s.GetUsersList(), null);
 	}
 }

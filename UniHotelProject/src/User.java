@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+
 
 public class User {
 	
@@ -8,7 +8,7 @@ public class User {
 	private String name = "";
 	private String surname = "";
 	
-	private ArrayList<Hotel> hotelList = new ArrayList<>();
+
 
 	
 	
@@ -19,20 +19,6 @@ public class User {
 		this.email = email;
 		this.name = name;
 		this.surname = surname;
-	}
-
-	
-	
-	
-	public void PushHotelListInUser(Hotel h) {
-		
-		hotelList.add(h);
-	}
-
-	
-	public void LogIn(ArrayList<User> users)
-	{
-		
 	}
 
 

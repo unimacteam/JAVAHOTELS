@@ -1,4 +1,4 @@
-|      Name      |    Location    |       Street       |   Price   | 
-    Afroditi     ,    Athens      ,    Kassandrou_12   ,    30     ,
-  Mediterranean  ,    Ksanthi     ,    Kiki_8          ,    80     ,
-    Kyrki        ,    Volos       ,    Dhmou_9         ,    45     ,
+|      Name      |    Location    |       Street       |   Price   |   [NumberOf:] AllRooms   |   ReservedRooms   |   Stars   |
+    Afroditi     ,    Athens      ,    Kassandrou_12   ,    30     ,            50            ,         0         ,     2     ,
+  Mediterranean  ,    Ksanthi     ,    Kiki_8          ,    80     ,            45            ,         0         ,     4     ,
+    Kyrki        ,    Volos       ,    Dhmou_9         ,    45     ,            32            ,         0         ,     3     ,

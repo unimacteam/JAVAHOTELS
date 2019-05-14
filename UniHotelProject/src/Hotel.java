@@ -1,5 +1,7 @@
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Hotel {
 
@@ -7,14 +9,21 @@ public class Hotel {
 	private String location = "";
 	private String street = "";
 	private double price = 0;
-	private ArrayList<Integer> ratings = new ArrayList<>();
+	private int numRooms = 0;
+	private int reservedRooms = 0;
+	private int stars = 0;
+	private ArrayList<User> usersInThisHotel = new ArrayList<>();
+	private Map<User, Integer> ratings = new HashMap<>();
 	
-	public Hotel(String name, String location, String street, double price) {
+	public Hotel(String name, String location, String street, double price, int numRooms, int reservedRooms, int stars) {
 		
 		this.name = name;
 		this.location = location;
 		this.street = street;
 		this.price = price;
+		this.numRooms = numRooms;
+		this.reservedRooms = reservedRooms;
+		this.stars = stars;
 	}
 	
 	public String getName() {
@@ -32,23 +41,38 @@ public class Hotel {
 	public double getPrice() {
 		return price;
 	}
+	
+	public int getNumOfAllRooms() {
+		return numRooms;
+	}
+	
+	public int getNumOfResRooms() {
+		return reservedRooms;
+	}
+	
+	public int getStars() {
+		return stars;
+	}
 
-	public ArrayList<Integer> getRatings() {
+	public Map<User, Integer> getRatings() {
 		return ratings;
 	}
 	
-	public void PushRating(int rate) {
+	public void AddRatingOfUser(User u, int rate) {
 		
-		ratings.add(rate);
+		ratings.put(u, rate);
 	}
 	
 	public double GetAverageRating() {
+		
 		//cR = countRate
 		double cR = 0, aR = 0;
 		
-		for(Integer r :ratings) {
+		//ratings
+		for(Map.Entry<User, Integer> r :ratings.entrySet()) {
 			
-			cR += r;
+			cR += r.getValue();
+			System.out.println(r.getKey().getName());
 		}
 		
 		aR = cR / ratings.size();
@@ -56,5 +80,13 @@ public class Hotel {
 		aR = Double.parseDouble(txt);
 		
 		return aR;
+	}
+	
+	public int UserReservedAtThisHotelAndReturnFreeRooms(User u) {
+		
+		usersInThisHotel.add(u);
+		reservedRooms++;
+		
+		return (numRooms - reservedRooms);
 	}
 }

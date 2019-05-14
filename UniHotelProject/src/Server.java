@@ -66,6 +66,8 @@ public class Server {
 			e.printStackTrace();
 		}
 		
+		Check();
+		
 		//MAIN SCREEN CALL
 		new MainScreenGUI(hotels, users);
 	}
@@ -77,6 +79,9 @@ public class Server {
 		String location = "";
 		String street = "";
 		double price = 0;
+		int numOfAllRooms = 0;
+		int reservedRooms = 0;
+		int stars = 0;
 		
 		line = line.replaceAll("\\s+", "");
 			
@@ -100,8 +105,23 @@ public class Server {
 		price = Double.parseDouble(line.substring(0, line.indexOf(",")));
 		pricS = line.substring(0, line.indexOf(","));
 		line = line.replaceAll(pricS + ",", "");
+		
+		String allRooms = "";
+		numOfAllRooms = Integer.parseInt(line.substring(0, line.indexOf(",")));
+		allRooms = line.substring(0, line.indexOf(","));
+		line = line.replaceAll(numOfAllRooms + ",", "");
+		
+		String resRooms = "";
+		reservedRooms = Integer.parseInt(line.substring(0, line.indexOf(",")));
+		resRooms = line.substring(0, line.indexOf(","));
+		line = line.replaceAll(reservedRooms + ",", "");
+		
+		String starsString = "";
+		stars = Integer.parseInt(line.substring(0, line.indexOf(",")));
+		starsString = line.substring(0, line.indexOf(","));
+		line = line.replaceAll(stars + ",", "");
 			
-		Hotel h = new Hotel(name, location, street, price);
+		Hotel h = new Hotel(name, location, street, price, numOfAllRooms, reservedRooms, stars);
 
 		hotels.add(h);
 	}
@@ -131,9 +151,8 @@ public class Server {
 		email = line.substring(0, line.indexOf(","));
 		line = line.replaceAll(email + ",", "");
 
-		/*User u = new User(userName, password, name, lastName, email);
+		User u = new User(userName, password, email, name, lastName);
 		users.add(u);
-		*/
 	}
 
 	public ArrayList<Hotel> GetHotelsList() {
@@ -144,5 +163,17 @@ public class Server {
 	public ArrayList<User> GetUsersList() {
 
 		return users;
+	}
+	
+	//CLASS ONLY FOR CHECKS OF OTHER FUNCTIONS
+	public void Check() {
+		
+		for(Hotel h :hotels) {
+			
+			System.out.println("Free Rooms " + h.UserReservedAtThisHotelAndReturnFreeRooms(users.get(0)) + " | " + h.getName());
+			h.AddRatingOfUser(users.get(0), 4);
+			h.AddRatingOfUser(users.get(1), 5);
+			System.out.println(h.GetAverageRating());
+		}
 	}
 }

@@ -1,12 +1,17 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 
 public class Server {
 	
 	private ArrayList<Hotel> hotels = new ArrayList<>();
 	private ArrayList<User> users = new ArrayList<>();
+	private ArrayList<User> activeUsers = new ArrayList<>();
 
 	public Server() {
 		
@@ -68,8 +73,10 @@ public class Server {
 		
 		Check();
 		
-		//MAIN SCREEN CALL
-		new MainScreenGUI(hotels, users);
+		//CONNECT FILES TO PROGRAMM, SO IT CAN WRITE DATA TO THEM
+		new SignUpForm(users, activeUsers);
+		
+		WriteUsersDataInFile(users.get(0));
 	}
 	
 	
@@ -163,6 +170,68 @@ public class Server {
 	public ArrayList<User> GetUsersList() {
 
 		return users;
+	}
+	
+	public void WriteUsersDataInFile(User u) {
+		
+		String fileUsers = "FilesServer/Users.txt";
+		
+		try {
+			
+			if(!CheckIfUserExists(u)) {
+				
+				System.out.println(CheckIfUserExists(u));
+				
+				BufferedWriter bw = new BufferedWriter(new FileWriter(fileUsers, true));
+            	bw.append(System.lineSeparator() + u.getUserName() + " , " + u.getPassCode() + 
+            			  " , " + u.getName() + " , " + u.getSurname() + " , " + u.getEmail() + " , ");
+            	bw.close();
+			}
+			else {
+				
+				System.out.println("Already In Use");
+				//JOptionPane.showMessageDialog(null, "Username already in use!");
+			}
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public boolean CheckIfUserExists(User u) {
+		
+		String fileUsers = "FilesServer/Users.txt";
+	
+		try {
+			
+			FileReader frU = new FileReader(fileUsers);
+			BufferedReader readerU = new BufferedReader(frU);
+
+			int c = 0;
+			
+			String lineU = readerU.readLine();
+			while(lineU != null) {
+				
+				lineU = lineU.replaceAll("\\s+", "");
+				c++;
+				if(c != 1) {
+				
+					System.out.println(c + ". " + lineU);
+					String userName = lineU.substring(0, lineU.indexOf(","));
+				
+					if(userName.equals(u.getUserName())) {
+					
+						return true;
+					}
+				}
+				lineU = readerU.readLine();
+			}
+		}
+		catch(IOException e) {
+				e.printStackTrace();
+		}
+		
+		return false;
 	}
 	
 	//CLASS ONLY FOR CHECKS OF OTHER FUNCTIONS

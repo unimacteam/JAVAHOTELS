@@ -14,6 +14,7 @@ public class Hotel {
 	private int stars = 0;
 	private ArrayList<User> usersInThisHotel = new ArrayList<>();
 	private Map<User, Integer> ratings = new HashMap<>();
+	private Map<User, String> comments = new HashMap<>();
 	
 	public Hotel(String name, String location, String street, double price, int numRooms, int reservedRooms, int stars) {
 		
@@ -61,6 +62,11 @@ public class Hotel {
 	public void AddRatingOfUser(User u, int rate) {
 		
 		ratings.put(u, rate);
+	}
+	
+	public void AddCommentOfUser(User u, String comment) {
+		
+		comments.put(u, comment);
 	}
 	
 	public double GetAverageRating() {

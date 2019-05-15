@@ -15,7 +15,7 @@ public class SignUpForm {
 	private String surname = "";
 	
 	ArrayList<User> users;
-	ArrayList<User> activeUsers;
+	//User activeUser;
 	
 	private JLabel logo = new JLabel("Sign Up:");
 	private JLabel haveAnAccountL = new JLabel ("Already have an account?");
@@ -37,10 +37,10 @@ public class SignUpForm {
 
 
 
-	public SignUpForm(ArrayList<User> users, ArrayList<User> activeUsers) {
+	public SignUpForm(ArrayList<User> users) {
 		
 		this.users = users;
-		this.activeUsers = activeUsers;
+		//this.activeUsers = activeUsers;
 		
 		signUpFrame.setBounds(200,100,400,350);
 		
@@ -148,7 +148,7 @@ public class SignUpForm {
 			name = nameT.getText();
 			surname = surnameT.getText();
 			this.SignUp(users);
-		
+			
 			signUpFrame.setVisible(false);
 			signUpFrame.dispose();
 			
@@ -191,9 +191,12 @@ public class SignUpForm {
 					User newUser = new User(userName,passCode, email, name,surname); 
 					users.add(newUser);
 					JOptionPane.showMessageDialog(signUpFrame, "Sign Up successful!");
+					new LogInForm(users, newUser);
+					
 					}	
 				
-			}
+				
+		}
 	public void UsernameInUsePopUp(){
 		if(!(usernameT.getText()==""))
 		{	JOptionPane.showMessageDialog(null, "Username already in use!");
@@ -212,7 +215,7 @@ public class SignUpForm {
 	{
 		public void actionPerformed(ActionEvent e) {
 			
-			new LogInForm(users, activeUsers);
+			new LogInForm(users, null);
 			signUpFrame.setVisible(false);
 			signUpFrame.dispose();
 		}

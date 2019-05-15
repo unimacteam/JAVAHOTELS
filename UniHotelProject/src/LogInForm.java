@@ -21,7 +21,7 @@ public class LogInForm {
 	private String passCode = "";
 	
 	ArrayList<User> users;
-	ArrayList<User> activeUsers;
+	User activeUser;
 	
 	private JLabel logo = new JLabel("Log In:");
 	private JLabel usernameL = new JLabel("Username:");
@@ -34,12 +34,12 @@ public class LogInForm {
 	private JButton LogInBtn = new JButton("Log In");
 	private JButton	doNotHaveAnAccountBtn = new JButton("Sign Up");
 	
-	public LogInForm(ArrayList<User> users, ArrayList<User> activeUsers)  {
+	public LogInForm(ArrayList<User> users, User activeUser)  {
 		
 		this.users = users;
-		this.activeUsers = activeUsers;
-		
-		LogInFrame.setBounds(200,100,400,250);
+		this.activeUser = activeUser;
+	if(activeUser==null)
+		{LogInFrame.setBounds(200,100,400,250);
 		
 		Container container = LogInFrame.getContentPane();
 		container.setLayout(null);
@@ -83,7 +83,9 @@ public class LogInForm {
 		
 		
 		LogInFrame.setVisible(true);
-		LogInFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		LogInFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);}
+	else
+		this.activeUser=activeUser;
 		
 	}
 	
@@ -104,19 +106,19 @@ public class LogInForm {
 			
 			userName = usernameT.getText();
 			passCode = passwordT.getText();
-			this.LogIn(users, activeUsers);
-			LogInFrame.setVisible(false);
-			LogInFrame.dispose();
+			if(this.LogIn(users, activeUser))
+				{LogInFrame.setVisible(false);
+				LogInFrame.dispose();}
 		
 		}
 		
 
 		
-		public void LogIn(ArrayList<User> users,ArrayList<User> activeUsers)
-		{	boolean logInSuccessful = false;
-		
-				
+		public boolean LogIn(ArrayList<User> users, User currentUser)
+		{	
 			
+			boolean logInSuccessful = false;
+				
 				//check if username and password match
 				for (User u: users)
 				{
@@ -124,7 +126,7 @@ public class LogInForm {
 						{
 							if (passCode.equals(u.getPassCode()))
 							{
-								activeUsers.add(u);
+								activeUser=u;
 								logInSuccessful = true;
 								JOptionPane.showMessageDialog(LogInFrame, "Logged in as: " + u.getUserName()+ ".");
 								break;
@@ -134,9 +136,11 @@ public class LogInForm {
 				}
 				if (!logInSuccessful)
 					this.WrongPasswordPopUp();
+				return logInSuccessful;
 			
 				
-					
+			
+			
 			}
 		
 		public void WrongPasswordPopUp()
@@ -149,10 +153,13 @@ public class LogInForm {
 	{
 		public void actionPerformed(ActionEvent e) {
 			
-			new SignUpForm(users, activeUsers);
+			new SignUpForm(users);
 			LogInFrame.setVisible(false);
 			LogInFrame.dispose();
 		}
 	}
 	}
+	
+	
+
 	

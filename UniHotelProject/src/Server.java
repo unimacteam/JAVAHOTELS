@@ -74,7 +74,7 @@ public class Server {
 		Check();
 		
 		//CONNECT FILES TO PROGRAMM, SO IT CAN WRITE DATA TO THEM
-		new SignUpForm(users, activeUsers);
+		//new SignUpForm(users, activeUsers);
 		
 		WriteUsersDataInFile(users.get(0));
 	}

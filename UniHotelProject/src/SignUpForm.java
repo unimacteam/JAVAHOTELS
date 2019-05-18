@@ -1,5 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -16,6 +19,7 @@ public class SignUpForm {
 	
 	ArrayList<User> users;
 	//User activeUser;
+	private User userWantToSignUp;
 	
 	private JLabel logo = new JLabel("Sign Up:");
 	private JLabel haveAnAccountL = new JLabel ("Already have an account?");
@@ -110,12 +114,10 @@ public class SignUpForm {
 		container.add(haveAnAccountBtn);
 		
 	
-	signUpFrame.setVisible(true);
+		signUpFrame.setVisible(true);
 			
-	signUpFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		signUpFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
-	
-
 	
 	public String getUserName() {
 		return userName;
@@ -138,9 +140,12 @@ public class SignUpForm {
 	}
 	
 
-	class SignUpButtonListener implements ActionListener
-	{
+	class SignUpButtonListener implements ActionListener {
+		
 		public void actionPerformed(ActionEvent e) {
+			
+			User newUser = new User(userName, passCode, email, name, surname);
+			boolean foundUser = false;
 			
 			userName = usernameT.getText();
 			passCode = passwordT.getText();
@@ -151,74 +156,93 @@ public class SignUpForm {
 			
 			signUpFrame.setVisible(false);
 			signUpFrame.dispose();
-			
 		}
 		
-		
-	public void SignUp(ArrayList<User> users)
-		{	
+		public void SignUp(ArrayList<User> users) {
+			
 			boolean inUse = false;
 			
 			//while attempting to sign up
-			
-			
-			
 				
 				//check if username or email are in use
 				
-				
-				for (User u: users)
-				{
-					if (userName.equals(u.getUserName()))
-						{
-						this.UsernameInUsePopUp();
-						usernameT.setText("");
-						inUse = true;
-						break;
-						}
-					else if (email.equals(u.getEmail()))
-						{
-						this.EmailInUsePopUp();
-						emailT.setText("");
-						inUse = true;
-						break;
-						}
-				
-				}
-				//if everything ok, register new user
-				if (!inUse)
-					{
-					User newUser = new User(userName,passCode, email, name,surname); 
-					users.add(newUser);
-					JOptionPane.showMessageDialog(signUpFrame, "Sign Up successful!");
-					new LogInForm(users, newUser);
+			for (User u: users) {
 					
-					}	
-				
-				
+				if (userName.equals(u.getUserName())) {
+		
+					this.UsernameInUsePopUp();
+					usernameT.setText("");
+					inUse = true;
+					break;
+				}
+				else if (email.equals(u.getEmail())) {
+					
+					this.EmailInUsePopUp();
+					emailT.setText("");
+					inUse = true;
+					break;
+				}
+			}
+			
+			//if everything ok, register new user
+			if (!inUse) {
+					
+				User newUser = new User(userName,passCode, email, name,surname);
+				users.add(newUser);
+				WriteUsersDataInFile(newUser);
+				JOptionPane.showMessageDialog(signUpFrame, "Sign Up successful!");
+				new LogInForm(users, newUser);
+			}
 		}
-	public void UsernameInUsePopUp(){
-		if(!(usernameT.getText()==""))
-		{	JOptionPane.showMessageDialog(null, "Username already in use!");
+		
+		public void WriteUsersDataInFile(User u) {
+			
+			String fileUsers = "FilesServer/Users.txt";
+			
+			try {
+					
+				BufferedWriter bw = new BufferedWriter(new FileWriter(fileUsers, true));
+				bw.append(System.lineSeparator() + u.getUserName() + " , " + u.getPassCode() + 
+	            			  " , " + u.getName() + " , " + u.getSurname() + " , " + u.getEmail() + " , ");
+	            bw.close();
+			}
+			catch(IOException e) {
+				
+				e.printStackTrace();
+			}
+		}
+	
+		public void UsernameInUsePopUp(){
+			
+			if(!(usernameT.getText()=="")) {
+				
+				JOptionPane.showMessageDialog(null, "Username already in use!");
 			}
 		
-	}
-	public void EmailInUsePopUp(){
-		if(!(emailT.getText()==""))
-		{
-		JOptionPane.showMessageDialog(null, "Email already in use!");
-	
+		}
+		
+		public void EmailInUsePopUp() {
+			
+			if(!(emailT.getText()=="")) {
+				
+				JOptionPane.showMessageDialog(null, "Email already in use!");
+			}
 		}
 	}
-	}
-	class HaveAnAccountButtonListener implements ActionListener
-	{
+	
+	class HaveAnAccountButtonListener implements ActionListener {
+		
 		public void actionPerformed(ActionEvent e) {
 			
 			new LogInForm(users, null);
 			signUpFrame.setVisible(false);
 			signUpFrame.dispose();
 		}
+	}
+	
+	public User GetUserThatWantsToSignUp() {
+		
+		return userWantToSignUp;
 	}
 }
 

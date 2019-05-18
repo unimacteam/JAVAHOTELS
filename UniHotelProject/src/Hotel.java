@@ -78,7 +78,6 @@ public class Hotel {
 		for(Map.Entry<User, Integer> r :ratings.entrySet()) {
 			
 			cR += r.getValue();
-			System.out.println(r.getKey().getName());
 		}
 		
 		aR = cR / ratings.size();

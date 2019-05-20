@@ -1,6 +1,9 @@
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,6 +16,7 @@ public class FilterPanel {
 		float ratings;// this or better
 		float pricePerNight;
 		String  roomType;
+		ArrayList<Hotel> applicableHotels;
 		/*
 		String dateOfArrival;
 		String dateOfDeparture;
@@ -32,7 +36,7 @@ public class FilterPanel {
 		private JComboBox pricePerNightList;
 		private JComboBox ratingsList;
 
-		
+		private JButton applyFiltersBtn = new JButton("Apply Filters");
 		
 		/*
 		private JSpinner pricePerNightSpinner = new JSpinner();
@@ -48,11 +52,11 @@ public class FilterPanel {
 		
 
 
-		public FilterPanel(ArrayList<String> citiesAL) {
+		public FilterPanel(ArrayList<String> citiesAL, ArrayList<Hotel> HotelsList) {
 			
 			Container container = filterFrame.getContentPane();
 			container.setLayout(null);
-			
+			applicableHotels = new ArrayList<>();
 			filterFrame.setBounds(200,100,400,350);
 			
 			//Label bounds
@@ -80,7 +84,26 @@ public class FilterPanel {
 			
 			ratingsList.setBounds(100, 120, 250, 30);
 			
+			//button bounds
 			
+			applyFiltersBtn.setBounds(100, 150, 250, 30);
+			applyFiltersBtn.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e)
+				{	
+					
+					for(Hotel h: HotelsList)
+					{
+						if (h.getLocation()==city&&h.GetAverageRating()>=ratings&&pricePerNight>=h.getPrice() 
+							&&(h.getNumOfAllRooms()-h.getNumOfResRooms()>=1)) 
+						{
+							applicableHotels.add(h);
+						}
+					}
+					System.out.println("Applicable hotels:");
+					for (Hotel h: applicableHotels)
+						System.out.println(h.getName());
+				}
+			});
 			
 			
 			
@@ -93,6 +116,7 @@ public class FilterPanel {
 			container.add(roomTypeList);
 			container.add(pricePerNightList);
 			container.add(ratingsList);
+			container.add(applyFiltersBtn);
 			
 			filterFrame.setVisible(true);
 			

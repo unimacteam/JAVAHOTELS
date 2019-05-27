@@ -72,6 +72,7 @@ public class MainScreenGUI extends JFrame {
 			
 			hC++;
 			ListInHotel(h, hC);
+			System.out.println(h.getRoomsPersonSize().toString());
 		}
 		
 		scrollPaneShwR.setSize(shwRPanel.getWidth(), shwRPanel.getHeight());

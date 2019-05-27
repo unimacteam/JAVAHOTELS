@@ -84,20 +84,20 @@ public class Server {
 		String location = "";
 		String street = "";
 		double price = 0;
-		int numOfAllRooms = 0;
-		int reservedRooms = 0;
+		ArrayList<Integer> roomsSize = new ArrayList<>();
+		ArrayList<Integer> resRoomsSize = new ArrayList<>();
 		int stars = 0;
 		
 		line = line.replaceAll("\\s+", "");
 			
-		name = line.substring(0, line.indexOf(","));
-		line = line.replaceAll(name + ",", "");
+		name = line.substring(0, line.indexOf("|"));
+		line = line.replaceAll(name + "\\|", "");
+		
+		location = line.substring(0, line.indexOf("|"));
+		line = line.replaceAll(location + "\\|", "");
 			
-		location = line.substring(0, line.indexOf(","));
-		line = line.replaceAll(location + ",", "");
-			
-		street = line.substring(0, line.indexOf(","));
-		line = line.replaceAll(street + ",", "");
+		street = line.substring(0, line.indexOf("|"));
+		line = line.replaceAll(street + "\\|", "");
 			
 		if(street.contains("_")) {
 				
@@ -106,27 +106,65 @@ public class Server {
 			street = streetName + " " + streetNum;
 		}
 		
-		String pricS = "";
-		price = Double.parseDouble(line.substring(0, line.indexOf(",")));
-		pricS = line.substring(0, line.indexOf(","));
-		line = line.replaceAll(pricS + ",", "");
-		
-		String allRooms = "";
-		numOfAllRooms = Integer.parseInt(line.substring(0, line.indexOf(",")));
-		allRooms = line.substring(0, line.indexOf(","));
-		line = line.replaceAll(numOfAllRooms + ",", "");
-		
-		String resRooms = "";
-		reservedRooms = Integer.parseInt(line.substring(0, line.indexOf(",")));
-		resRooms = line.substring(0, line.indexOf(","));
-		line = line.replaceAll(reservedRooms + ",", "");
-		
-		String starsString = "";
-		stars = Integer.parseInt(line.substring(0, line.indexOf(",")));
-		starsString = line.substring(0, line.indexOf(","));
-		line = line.replaceAll(stars + ",", "");
+		price = Double.parseDouble(line.substring(0, line.indexOf("|")));
+		String pricS = line.substring(0, line.indexOf("|"));
+		line = line.replaceAll(pricS + "\\|", "");
+	
+		for(int i = 0; i < 3; i++) {
 			
-		Hotel h = new Hotel(name, location, street, price, numOfAllRooms, reservedRooms, stars);
+			if(i < 2) {
+				
+				roomsSize.add(Integer.parseInt(line.substring(0, line.indexOf(","))));
+				String sizePersons = line.substring(0, line.indexOf(","));;
+				line = line.replaceFirst(sizePersons + ",", "");
+			}
+			else {
+				
+				roomsSize.add(Integer.parseInt(line.substring(0, line.indexOf("|"))));
+				String sizePersons = line.substring(0, line.indexOf("|"));;
+				line = line.replaceFirst(sizePersons + "\\|", "");
+			}
+		}
+		
+		for(int i = 0; i < 3; i++) {
+			
+			int front = 0;
+			int back = 0;
+			String dollarCheckF = "";
+			String dollarCheckL = "";
+			String changeCategSymbolChecker = "";
+			
+			if(i == 0) {
+				
+				front = 1;
+				back = line.indexOf(",");
+				dollarCheckF = "\\$";
+				changeCategSymbolChecker = ",";
+			}
+			else if(i == 1) {
+				
+				front = 0;
+				back = line.indexOf(",");
+				changeCategSymbolChecker = ",";
+			}
+			else if(i == 2) {
+				
+				front = 0;
+				back = line.indexOf("|") - 1;
+				dollarCheckL = "\\$";
+				changeCategSymbolChecker = "\\|";
+			}
+
+			resRoomsSize.add(Integer.parseInt(line.substring(front, back)));
+			String resSizePersons = line.substring(front, back);
+			line = line.replaceFirst(dollarCheckF + resSizePersons + dollarCheckL + changeCategSymbolChecker, "");
+		}
+
+		stars = Integer.parseInt(line.substring(0, line.indexOf("|")));
+		String starsString = line.substring(0, line.indexOf("|"));
+		line = line.replaceAll(stars + "\\|", "");
+			
+		Hotel h = new Hotel(name, location, street, price, roomsSize, resRoomsSize, stars);
 
 		hotels.add(h);
 	}
@@ -173,12 +211,11 @@ public class Server {
 	//CLASS ONLY FOR CHECKS OF OTHER FUNCTIONS
 	public void Check() {
 		
-		for(Hotel h :hotels) {
+		Hotel h = hotels.get(0);
 			
-			System.out.println("Free Rooms " + h.UserReservedAtThisHotelAndReturnFreeRooms(users.get(0)) + " | " + h.getName());
+			System.out.println("Free Rooms " + h.UserReservedAtThisHotelAndReturnFreeRooms(users.get(0), h, 3) + " | " + h.getName());
 			h.AddRatingOfUser(users.get(0), 4);
 			h.AddRatingOfUser(users.get(1), 5);
 			System.out.println(h.GetAverageRating());
-		}
 	}
 }

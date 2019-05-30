@@ -27,8 +27,7 @@ public class Hotel {
 	private int resRoomsFor4 = 0;
 	private int stars = 0;
 	private Map<Integer, User> usersInThisHotel = new HashMap<>();
-	private Map<User, Integer> ratings = new HashMap<>();
-	private Map<User, String> comments = new HashMap<>();
+	private ArrayList<RatesAndComms> ratingsAndComms = new ArrayList<>();
 	
 	public Hotel(String name, String location, String street, double price, ArrayList<Integer> roomsSize, ArrayList<Integer> resRoomsSize, int stars) {
 		
@@ -42,6 +41,7 @@ public class Hotel {
 		
 		GiveDataFromResRoomsArrayToVar();
 		CreateANewTxtFileForThisHotel();
+		ReadTheRatingsFromTxtFile();
 	}
 	
 	public String getName() {
@@ -119,7 +119,6 @@ public class Hotel {
 	
 	public void GiveDataFromResRoomsArrayToVar() {
 		
-		System.out.println(getName());
 		resRoomsFor1 = resRoomsSize.get(0);
 		resRoomsFor2 = resRoomsSize.get(1);
 		resRoomsFor3 = resRoomsSize.get(2);
@@ -145,21 +144,6 @@ public class Hotel {
 	public int getStars() {
 		return stars;
 	}
-
-	public Map<User, Integer> getRatings() {
-		return ratings;
-	}
-	
-	public void AddRatingOfUser(User u, int rate) {
-		
-		System.out.println(u.getUserName() + rate);
-		ratings.put(u, rate);
-	}
-	
-	public void AddCommentOfUser(User u, String comment) {
-		
-		comments.put(u, comment);
-	}
 	
 	public double GetAverageRating() {
 		
@@ -167,16 +151,21 @@ public class Hotel {
 		double cR = 0, aR = 0;
 		
 		//ratings
-		System.out.println(cR);
-		for(Map.Entry<User, Integer> r :ratings.entrySet()) {
+		if(ratingsAndComms.size() != 0) {
 			
-			cR += r.getValue();
-			System.out.println(r.getValue());
-		}
+			for(RatesAndComms rAc :ratingsAndComms) {
+				
+				cR += rAc.getRating();
+			}
 		
-		aR = cR / ratings.size();
-		String txt = new DecimalFormat("##.#").format(aR);
-		aR = Double.parseDouble(txt);
+			aR = cR / ratingsAndComms.size();
+			String txt = new DecimalFormat("##.#").format(aR);
+			aR = Double.parseDouble(txt);
+		}
+		else {
+			
+			System.out.println("NO RATINGS FOUND");
+		}
 		
 		return aR;
 	}
@@ -208,8 +197,6 @@ public class Hotel {
 			resRoomsFor4++;
 			c = resRoomsFor4;
 		}
-		
-		System.out.println(resRoomsFor1 + " | " + resRoomsFor2 + " | " + resRoomsFor3 + " | " + resRoomsFor4);
 		
 		roomsLeft = getAllRooms() - getAllResRooms();
 		
@@ -269,7 +256,7 @@ public class Hotel {
 	
 	public void CreateANewTxtFileForThisHotel() {
 		
-		String txtName = "C:\\Users\\Billy\\git\\JAVAHOTELS\\UniHotelProject\\FilesServer\\HotelsFiles\\" + getName() + "_RatesAndComms.txt";
+		String txtName = "FilesServer\\HotelsFiles\\" + getName() + "_RatesAndComms.txt";
 		
 		File check = new File(txtName);
 		
@@ -299,7 +286,6 @@ public class Hotel {
 		String fileHotel = "FilesServer\\HotelsFiles\\" + h.getName() + "_RatesAndComms.txt";
 		ArrayList<String> allDataOfTheRatesOfThisHotel = new ArrayList<>();
 		boolean userRCFound = false;
-		boolean userRCNotFound = false;
 		
 		try {
 				
@@ -317,27 +303,16 @@ public class Hotel {
 					String newLineHRC = "  " + u.getUserName() + "  |  " + uRating + "  |  " + uComment + "  |";
 					lineHRC = newLineHRC;
 				}
-				else {
-					
-					userRCNotFound = true;
-				}
 				
-				//if(!userRCNotFound) {
-					
 				allDataOfTheRatesOfThisHotel.add(lineHRC);
-				//}
 				
 				lineHRC = readerHRC.readLine();
 				checkH = true;
 			}
 			
-			System.out.println("UC" + userRCFound);
-			
 			if(!userRCFound) {
 				
-				AddRatingOfUser(u, uRating);
-				AddCommentOfUser(u, uComment);
-				
+				System.out.println("In");
 				BufferedWriter bw1 = new BufferedWriter(new FileWriter(fileHotel, true));
 				bw1.append(System.lineSeparator() + "  " + u.getUserName() + "  |  " + uRating + "  |  " + uComment + "  |");
 				
@@ -364,11 +339,6 @@ public class Hotel {
 				
 				bw2.close();
 			}
-			
-			/*for(String l :allDataOfTheRatesOfThisHotel) {
-				
-				bw.write(l + System.lineSeparator());
-			}*/
 
 			readerHRC.close();
 		}
@@ -376,5 +346,58 @@ public class Hotel {
 			
 			e.printStackTrace();
 		}
+	}
+	
+	public void ReadTheRatingsFromTxtFile() {
+		
+		String fileHotelsRC = "FilesServer/HotelsFiles/" + getName() + "_RatesAndComms.txt";
+
+		try { 
+
+			FileReader frHRC = new FileReader(fileHotelsRC);
+			BufferedReader readerHRC = new BufferedReader(frHRC);
+
+			boolean checkHRC = false;
+			String lineHRC = readerHRC.readLine();
+			while(lineHRC != null) {
+
+				if(checkHRC) {
+
+					CreateHotelsRC(lineHRC);
+				}
+
+				lineHRC = readerHRC.readLine();
+				checkHRC = true;
+			}
+
+			readerHRC.close();
+		}
+		catch(IOException e) {
+
+			e.printStackTrace();
+		}
+	}
+	
+	public void CreateHotelsRC(String line) {
+		
+		String userName;
+		int rating = 0;
+		String comment = "";
+		
+		line = line.replaceAll("\\s+", "");
+		
+		userName = line.substring(0, line.indexOf("|"));
+		line = line.replaceAll(userName + "\\|", "");
+		
+		rating = Integer.parseInt(line.substring(0, line.indexOf("|")));
+		String rateS = line.substring(0, line.indexOf("|"));
+		line = line.replaceAll(rateS + "\\|", "");
+		
+		comment = line.substring(0, line.indexOf("|"));
+		line = line.replaceAll(comment + "\\|", "");
+		
+		RatesAndComms rAc = new RatesAndComms(userName, rating, comment);
+		
+		ratingsAndComms.add(rAc);
 	}
 }

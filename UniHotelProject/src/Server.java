@@ -214,6 +214,7 @@ public class Server {
 		Hotel h = hotels.get(0);
 			
 			System.out.println("Free Rooms " + h.UserReservedAtThisHotelAndReturnFreeRooms(users.get(0), h, 3) + " | " + h.getName());
-			h.WriteRatingAndComment(h, users.get(2), 5, "JJ");
+			h.WriteRatingAndComment(h, users.get(0), 3, "JJ");
+			System.out.println("Rates: " + h.GetAverageRating());
 	}
 }

@@ -1,3 +1,4 @@
-|    Userame    |    Password    |       Name       |       LastName       |            Email            |
-      Zeles     ,     fried      ,    Alexandros    ,     Papadopoulos     ,      dai22022@uom.edu.gr    ,
-      Swtys     ,     deeper     ,     Swthrhs      ,       Siamaths       ,      dai22167@uom.edu.gr    ,
+  Userame    |    Password    |       Name       |       LastName       |            Email            |
+  Zeles  |  fried  |  Alexandros  |  Papadopoulos  |  dai22022@uom.edu.gr  |
+  Swtys  |  deeper  |  Swthrhs  |  Siamaths  |  dai22167@uom.edu.gr  |
+  GiOne  |  Op  |  John  |  Wick  |  hdhdhdh@outlook.com  |  

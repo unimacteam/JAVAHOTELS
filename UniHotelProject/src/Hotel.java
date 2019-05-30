@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,10 +16,12 @@ public class Hotel {
 	private String street = "";
 	private double price = 0;
 	private ArrayList<Integer> roomsSize = new ArrayList<>();
+	private int roomsFor1 = 0;
 	private int roomsFor2 = 0;
 	private int roomsFor3 = 0;
 	private int roomsFor4 = 0;
 	private ArrayList<Integer> resRoomsSize = new ArrayList<>();
+	private int resRoomsFor1 = 0;
 	private int resRoomsFor2 = 0;
 	private int resRoomsFor3 = 0;
 	private int resRoomsFor4 = 0;
@@ -38,6 +41,7 @@ public class Hotel {
 		this.stars = stars;
 		
 		GiveDataFromResRoomsArrayToVar();
+		CreateANewTxtFileForThisHotel();
 	}
 	
 	public String getName() {
@@ -72,23 +76,30 @@ public class Hotel {
 		return c;
 	}
 	
+	public int getAllRoomsFor1() {
+		
+		roomsFor1 = roomsSize.get(0);
+		
+		return roomsFor1;
+	}
+	
 	public int getAllRoomsFor2() {
 		
-		roomsFor2 = roomsSize.get(0);
+		roomsFor2 = roomsSize.get(1);
 		
 		return roomsFor2;
 	}
 	
 	public int getAllRoomsFor3() {
 		
-		roomsFor3 = roomsSize.get(1);
+		roomsFor3 = roomsSize.get(2);
 		
 		return roomsFor3;
 	}
 
 	public int getAllRoomsFor4() {
 	
-		roomsFor4 = roomsSize.get(2);
+		roomsFor4 = roomsSize.get(3);
 	
 		return roomsFor4;
 	}
@@ -101,7 +112,7 @@ public class Hotel {
 		
 		int c = 0;
 		
-		c = resRoomsFor2 + resRoomsFor3 + resRoomsFor4;
+		c = resRoomsFor1 + resRoomsFor2 + resRoomsFor3 + resRoomsFor4;
 		
 		return c;
 	}
@@ -109,9 +120,14 @@ public class Hotel {
 	public void GiveDataFromResRoomsArrayToVar() {
 		
 		System.out.println(getName());
-		resRoomsFor2 = resRoomsSize.get(0);
-		resRoomsFor3 = resRoomsSize.get(1);
-		resRoomsFor4 = resRoomsSize.get(2);
+		resRoomsFor1 = resRoomsSize.get(0);
+		resRoomsFor2 = resRoomsSize.get(1);
+		resRoomsFor3 = resRoomsSize.get(2);
+		resRoomsFor4 = resRoomsSize.get(3);
+	}
+	
+	public int getReservedRoomsFor1() {
+		return resRoomsFor1;
 	}
 	
 	public int getReservedRoomsFor2() {
@@ -136,6 +152,7 @@ public class Hotel {
 	
 	public void AddRatingOfUser(User u, int rate) {
 		
+		System.out.println(u.getUserName() + rate);
 		ratings.put(u, rate);
 	}
 	
@@ -150,9 +167,11 @@ public class Hotel {
 		double cR = 0, aR = 0;
 		
 		//ratings
+		System.out.println(cR);
 		for(Map.Entry<User, Integer> r :ratings.entrySet()) {
 			
 			cR += r.getValue();
+			System.out.println(r.getValue());
 		}
 		
 		aR = cR / ratings.size();
@@ -169,7 +188,12 @@ public class Hotel {
 		
 		usersInThisHotel.put(numOfPersons, u);
 		
-		if(numOfPersons == 2) {
+		if(numOfPersons == 1) {
+			
+			resRoomsFor1++;
+			c = resRoomsFor1;
+		}
+		else if(numOfPersons == 2) {
 			
 			resRoomsFor2++;
 			c = resRoomsFor2;
@@ -185,7 +209,7 @@ public class Hotel {
 			c = resRoomsFor4;
 		}
 		
-		System.out.println(resRoomsFor2 + " | " + resRoomsFor3 + " | " + resRoomsFor4);
+		System.out.println(resRoomsFor1 + " | " + resRoomsFor2 + " | " + resRoomsFor3 + " | " + resRoomsFor4);
 		
 		roomsLeft = getAllRooms() - getAllResRooms();
 		
@@ -212,9 +236,10 @@ public class Hotel {
 
 					if(lineH.contains(h.getName())) {
 						
-						String newLineH = "  " + h.getName() + "  |  " + h.getLocation() + "  |  " + h.getStreet() + "  |  " + h.getPrice() + "  |  " + h.getAllRoomsFor2()
-										  + " , " + h.getAllRoomsFor3() + " , " + h.getAllRoomsFor4() + "  |  " + "$" + h.getReservedRoomsFor2() + " , "
-										  + h.getReservedRoomsFor3() + ", " + h.getReservedRoomsFor4() + "$" + "  |  " + h.getStars() + "  |";
+						String newLineH = "  " + h.getName() + "  |  " + h.getLocation() + "  |  " + h.getStreet() + "  |  " + h.getPrice() + "  |  " + h.getAllRoomsFor1()
+										  + " , " + h.getAllRoomsFor2() + " , " + h.getAllRoomsFor3() + " , " + h.getAllRoomsFor4() + "  |  " + "$" + h.getReservedRoomsFor1()
+										  + " , " + h.getReservedRoomsFor2() + " , " + h.getReservedRoomsFor3() + ", " + h.getReservedRoomsFor4() + "$" + "  |  " 
+										  + h.getStars() + "  |";
 						lineH = newLineH;
 					}
 				}
@@ -235,6 +260,117 @@ public class Hotel {
 			readerH.close();
 			
 			bw.close();
+		}
+		catch(IOException e) {
+			
+			e.printStackTrace();
+		}
+	}
+	
+	public void CreateANewTxtFileForThisHotel() {
+		
+		String txtName = "C:\\Users\\Billy\\git\\JAVAHOTELS\\UniHotelProject\\FilesServer\\HotelsFiles\\" + getName() + "_RatesAndComms.txt";
+		
+		File check = new File(txtName);
+		
+		if(!check.exists()) {
+			
+			try {
+			
+				File f = new File(txtName);
+				FileWriter writer = new FileWriter(f);
+				writer.write("  User    |    Rating    |      Comment      |");
+				
+				writer.close();
+			}
+			catch(IOException e) {
+			
+				e.printStackTrace();
+			}
+		}
+		else {
+			
+			System.out.println("EXISTS");
+		}
+	}
+	
+	public void WriteRatingAndComment(Hotel h, User u, int uRating, String uComment) {
+		
+		String fileHotel = "FilesServer\\HotelsFiles\\" + h.getName() + "_RatesAndComms.txt";
+		ArrayList<String> allDataOfTheRatesOfThisHotel = new ArrayList<>();
+		boolean userRCFound = false;
+		boolean userRCNotFound = false;
+		
+		try {
+				
+			FileReader frHRC = new FileReader(fileHotel);
+			BufferedReader readerHRC = new BufferedReader(frHRC);
+			
+			boolean checkH = false;
+			String lineHRC = readerHRC.readLine();
+			while(lineHRC != null) {
+				
+				if(lineHRC.contains(u.getUserName())) {
+					
+					userRCFound = true;
+					
+					String newLineHRC = "  " + u.getUserName() + "  |  " + uRating + "  |  " + uComment + "  |";
+					lineHRC = newLineHRC;
+				}
+				else {
+					
+					userRCNotFound = true;
+				}
+				
+				//if(!userRCNotFound) {
+					
+				allDataOfTheRatesOfThisHotel.add(lineHRC);
+				//}
+				
+				lineHRC = readerHRC.readLine();
+				checkH = true;
+			}
+			
+			System.out.println("UC" + userRCFound);
+			
+			if(!userRCFound) {
+				
+				AddRatingOfUser(u, uRating);
+				AddCommentOfUser(u, uComment);
+				
+				BufferedWriter bw1 = new BufferedWriter(new FileWriter(fileHotel, true));
+				bw1.append(System.lineSeparator() + "  " + u.getUserName() + "  |  " + uRating + "  |  " + uComment + "  |");
+				
+				bw1.close();
+			}
+			else {
+				
+				System.out.println("Already user " + u.getUserName() + " has already made a rate and a comment");
+				BufferedWriter bw2 = new BufferedWriter(new FileWriter(fileHotel, false));
+				
+				int c = 0;
+				for(String l :allDataOfTheRatesOfThisHotel) {
+					
+					c++;
+					if(c != allDataOfTheRatesOfThisHotel.size()) {
+						
+						bw2.write(l + System.lineSeparator());
+					}
+					else {
+						
+						bw2.write(l);
+					}
+				}
+				
+				bw2.close();
+			}
+			
+			/*for(String l :allDataOfTheRatesOfThisHotel) {
+				
+				bw.write(l + System.lineSeparator());
+			}*/
+
+			readerHRC.close();
 		}
 		catch(IOException e) {
 			

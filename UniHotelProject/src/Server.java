@@ -110,9 +110,9 @@ public class Server {
 		String pricS = line.substring(0, line.indexOf("|"));
 		line = line.replaceAll(pricS + "\\|", "");
 	
-		for(int i = 0; i < 3; i++) {
+		for(int i = 0; i < 4; i++) {
 			
-			if(i < 2) {
+			if(i < 3) {
 				
 				roomsSize.add(Integer.parseInt(line.substring(0, line.indexOf(","))));
 				String sizePersons = line.substring(0, line.indexOf(","));;
@@ -126,7 +126,7 @@ public class Server {
 			}
 		}
 		
-		for(int i = 0; i < 3; i++) {
+		for(int i = 0; i < 4; i++) {
 			
 			int front = 0;
 			int back = 0;
@@ -141,13 +141,13 @@ public class Server {
 				dollarCheckF = "\\$";
 				changeCategSymbolChecker = ",";
 			}
-			else if(i == 1) {
+			else if(i > 0 && i < 3) {
 				
 				front = 0;
 				back = line.indexOf(",");
 				changeCategSymbolChecker = ",";
 			}
-			else if(i == 2) {
+			else if(i == 3) {
 				
 				front = 0;
 				back = line.indexOf("|") - 1;
@@ -179,20 +179,20 @@ public class Server {
 
 		line = line.replaceAll("\\s+", "");
 
-		userName = line.substring(0, line.indexOf(","));
-		line = line.replaceAll(userName + ",", "");
+		userName = line.substring(0, line.indexOf("|"));
+		line = line.replaceAll(userName + "\\|", "");
 
-		password = line.substring(0, line.indexOf(","));
-		line = line.replaceAll(password + ",", "");
+		password = line.substring(0, line.indexOf("|"));
+		line = line.replaceAll(password + "\\|", "");
 
-		name = line.substring(0, line.indexOf(","));
-		line = line.replaceAll(name + ",", "");
+		name = line.substring(0, line.indexOf("|"));
+		line = line.replaceAll(name + "\\|", "");
 
-		lastName = line.substring(0, line.indexOf(","));
-		line = line.replaceAll(lastName + ",", "");
+		lastName = line.substring(0, line.indexOf("|"));
+		line = line.replaceAll(lastName + "\\|", "");
 
-		email = line.substring(0, line.indexOf(","));
-		line = line.replaceAll(email + ",", "");
+		email = line.substring(0, line.indexOf("|"));
+		line = line.replaceAll(email + "\\|", "");
 
 		User u = new User(userName, password, email, name, lastName);
 		users.add(u);
@@ -214,8 +214,6 @@ public class Server {
 		Hotel h = hotels.get(0);
 			
 			System.out.println("Free Rooms " + h.UserReservedAtThisHotelAndReturnFreeRooms(users.get(0), h, 3) + " | " + h.getName());
-			h.AddRatingOfUser(users.get(0), 4);
-			h.AddRatingOfUser(users.get(1), 5);
-			System.out.println(h.GetAverageRating());
+			h.WriteRatingAndComment(h, users.get(2), 5, "JJ");
 	}
 }

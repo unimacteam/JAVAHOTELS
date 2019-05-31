@@ -2,8 +2,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -21,7 +25,7 @@ public class MainScreenGUI extends JFrame {
 	private JPanel shwRPanel = new JPanel();
 	
 	//HOTELS PANEL LIST
-	private ArrayList<JPanel> hotelsListPanel = new ArrayList<>();
+	private ArrayList<JButton> hotelsListPanel = new ArrayList<>();
 	
 	//ARRAYLIST
 	private ArrayList<Hotel> hotels = new ArrayList<>();
@@ -81,7 +85,7 @@ public class MainScreenGUI extends JFrame {
 	public void ListInHotel(Hotel h, int hotelCounter) {
 		
 		GridBagConstraints gbc = new GridBagConstraints();
-		JPanel hotelPanel = new JPanel();
+		JButton hotelPanel = new JButton();
 		hotelPanel.setName(h.getName());
 
 		if(hotelCounter == 1) {
@@ -104,8 +108,26 @@ public class MainScreenGUI extends JFrame {
 		hotelPanel.setBackground(Color.ORANGE);
 		hotelPanel.setBorder(new LineBorder(Color.GREEN));;
 		
+		ButtonListener bl = new ButtonListener();
+		hotelPanel.addActionListener(bl);
+		
 		shwRPanel.add(hotelPanel, gbc);
 		hotelsListPanel.add(hotelPanel);
 		//System.out.println(hotelCounter);
+	}
+	
+
+	class ButtonListener implements ActionListener {
+
+		public void actionPerformed(ActionEvent e) {
+			
+			for(Hotel h :hotels) {
+				
+				if(((JComponent) e.getSource()).getName().equals(h.getName())) {
+				
+					System.out.println(((JComponent)e.getSource()).getName());
+				}
+			}
+		}
 	}
 }

@@ -1,4 +1,4 @@
   Name      |    Location    |       Street       |   Price   |   RoomsSize(1_2_3_4)   |  ReservedRoomsSize(1_2_3_4)  |   Stars   |
-  Afroditi  |  Athens  |  Kassandrou12  |  30.0  |  10 , 20 , 15 , 15  |  $0 , 0 , 4, 1$  |  2  |
+  Afroditi  |  Athens  |  Kassandrou12  |  30.0  |  10 , 20 , 15 , 15  |  $0 , 0 , 20, 1$  |  2  |
   Mediterranean  |  Ksanthi  |  Kiki 8  |  80.0  |  8 , 20 , 12 , 13  |  $0 , 0 , 1, 0$  |  4  |
   Kyrki  |  Volos  |  Dhmou 9  |  45.0  |  9 , 11 , 10 , 11  |  $0 , 0 , 1, 0$  |  3  |

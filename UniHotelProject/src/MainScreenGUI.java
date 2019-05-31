@@ -25,7 +25,7 @@ public class MainScreenGUI extends JFrame {
 	private JPanel shwRPanel = new JPanel();
 	
 	//HOTELS PANEL LIST
-	private ArrayList<JButton> hotelsListPanel = new ArrayList<>();
+	private ArrayList<JButton> hotelsListButtons = new ArrayList<>();
 	
 	//ARRAYLIST
 	private ArrayList<Hotel> hotels = new ArrayList<>();
@@ -85,13 +85,13 @@ public class MainScreenGUI extends JFrame {
 	public void ListInHotel(Hotel h, int hotelCounter) {
 		
 		GridBagConstraints gbc = new GridBagConstraints();
-		JButton hotelPanel = new JButton();
-		hotelPanel.setName(h.getName());
+		JButton hotelButton = new JButton();
+		hotelButton.setName(h.getName());
 
 		if(hotelCounter == 1) {
 			
 			//hotelPanel.setBounds(1, 40, shwRPanel.getWidth() - 2, 200);
-			hotelPanel.setPreferredSize(new Dimension(500, 200));
+			hotelButton.setPreferredSize(new Dimension(500, 200));
 			gbc.fill = GridBagConstraints.HORIZONTAL;
 	        gbc.gridx = 0;
 	        gbc.gridy = 0;
@@ -99,20 +99,20 @@ public class MainScreenGUI extends JFrame {
 		else {
 			
 			//hotelPanel.setBounds(1, ((hotelCounter - 1) * 240) + 40, shwRPanel.getWidth() - 2, 200);
-			hotelPanel.setPreferredSize(new Dimension(500, 200));
+			hotelButton.setPreferredSize(new Dimension(500, 200));
 			gbc.fill = GridBagConstraints.HORIZONTAL;
 	        gbc.gridx = 0;
 	        gbc.gridy = hotelCounter;
 		}
 		
-		hotelPanel.setBackground(Color.ORANGE);
-		hotelPanel.setBorder(new LineBorder(Color.GREEN));;
+		hotelButton.setBackground(Color.ORANGE);
+		hotelButton.setBorder(new LineBorder(Color.GREEN));;
 		
 		ButtonListener bl = new ButtonListener();
-		hotelPanel.addActionListener(bl);
+		hotelButton.addActionListener(bl);
 		
-		shwRPanel.add(hotelPanel, gbc);
-		hotelsListPanel.add(hotelPanel);
+		shwRPanel.add(hotelButton, gbc);
+		hotelsListButtons.add(hotelButton);
 		//System.out.println(hotelCounter);
 	}
 	

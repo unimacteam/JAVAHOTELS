@@ -113,7 +113,6 @@ public class MainScreenGUI extends JFrame {
 		
 		shwRPanel.add(hotelButton, gbc);
 		hotelsListButtons.add(hotelButton);
-		//System.out.println(hotelCounter);
 	}
 	
 

@@ -203,7 +203,7 @@ public class SignUpForm {
 					
 				BufferedWriter bw = new BufferedWriter(new FileWriter(fileUsers, true));
 				bw.append(System.lineSeparator() + "  " + u.getUserName() + "  |  " + u.getPassCode() + 
-	            			  "  |  " + u.getName() + "  |  " + u.getSurname() + "  |  " + u.getEmail() + "  |  ");
+	            		  "  |  " + u.getName() + "  |  " + u.getSurname() + "  |  " + u.getEmail() + "  |  ");
 	            bw.close();
 			}
 			catch(IOException e) {

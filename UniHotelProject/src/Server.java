@@ -1,11 +1,7 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import javax.swing.JOptionPane;
 
 public class Server {
 	
@@ -83,10 +79,11 @@ public class Server {
 		String name = "";
 		String location = "";
 		String street = "";
-		double price = 0;
+		ArrayList<Double> price = new ArrayList<>();
 		ArrayList<Integer> roomsSize = new ArrayList<>();
 		ArrayList<Integer> resRoomsSize = new ArrayList<>();
 		int stars = 0;
+		ArrayList<String> extra = new ArrayList<>();
 		
 		line = line.replaceAll("\\s+", "");
 			
@@ -100,16 +97,28 @@ public class Server {
 		line = line.replaceAll(street + "\\|", "");
 			
 		if(street.contains("_")) {
-				
+			
 			String streetName = street.substring(0, street.indexOf("_"));
 			String streetNum = street.substring(street.indexOf("_") + 1, street.length());
 			street = streetName + " " + streetNum;
 		}
 		
-		price = Double.parseDouble(line.substring(0, line.indexOf("|")));
-		String pricS = line.substring(0, line.indexOf("|"));
-		line = line.replaceAll(pricS + "\\|", "");
-	
+		for(int i = 0; i < 4; i++) {
+			
+			if(i < 3) {
+				
+				price.add(Double.parseDouble(line.substring(0, line.indexOf(","))));
+				String pricS = line.substring(0, line.indexOf(","));
+				line = line.replaceAll(pricS + ",", "");
+			}
+			else {
+				
+				price.add(Double.parseDouble(line.substring(0, line.indexOf("|"))));
+				String pricS = line.substring(0, line.indexOf("|"));
+				line = line.replaceAll(pricS + "\\|", "");
+			}
+		}
+		
 		for(int i = 0; i < 4; i++) {
 			
 			if(i < 3) {
@@ -162,9 +171,29 @@ public class Server {
 
 		stars = Integer.parseInt(line.substring(0, line.indexOf("|")));
 		String starsString = line.substring(0, line.indexOf("|"));
-		line = line.replaceAll(stars + "\\|", "");
-			
-		Hotel h = new Hotel(name, location, street, price, roomsSize, resRoomsSize, stars);
+		line = line.replaceAll(starsString + "\\|", "");
+		
+		String pool = line.substring(0, line.indexOf("|"));
+		extra.add(pool);
+		line = line.replaceFirst(pool + "\\|", "");
+		
+		String gym = line.substring(0, line.indexOf("|"));
+		extra.add(gym);
+		line = line.replaceFirst(gym + "\\|", "");
+		
+		String restau = line.substring(0, line.indexOf("|"));
+		extra.add(restau);
+		line = line.replaceFirst(restau + "\\|", "");
+		
+		String breakf = line.substring(0, line.indexOf("|"));
+		extra.add(breakf);
+		line = line.replaceFirst(breakf + "\\|", "");
+		
+		String lunch = line.substring(0, line.indexOf("|"));
+		extra.add(lunch);
+		line = line.replaceFirst(lunch + "\\|", "");
+	
+		Hotel h = new Hotel(name, location, street, price, roomsSize, resRoomsSize, stars, extra);
 
 		hotels.add(h);
 	}

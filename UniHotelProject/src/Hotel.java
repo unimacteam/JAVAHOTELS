@@ -14,7 +14,7 @@ public class Hotel {
 	private String name = "";
 	private String location = "";
 	private String street = "";
-	private double price = 0;
+	private ArrayList<Double> price = new ArrayList<>();
 	private ArrayList<Integer> roomsSize = new ArrayList<>();
 	private int roomsFor1 = 0;
 	private int roomsFor2 = 0;
@@ -26,10 +26,12 @@ public class Hotel {
 	private int resRoomsFor3 = 0;
 	private int resRoomsFor4 = 0;
 	private int stars = 0;
+	private ArrayList<String> extras = new ArrayList<>();
+	private String details = "";
 	private Map<Integer, User> usersInThisHotel = new HashMap<>();
 	private ArrayList<RatesAndComms> ratingsAndComms = new ArrayList<>();
 	
-	public Hotel(String name, String location, String street, double price, ArrayList<Integer> roomsSize, ArrayList<Integer> resRoomsSize, int stars) {
+	public Hotel(String name, String location, String street, ArrayList<Double> price, ArrayList<Integer> roomsSize, ArrayList<Integer> resRoomsSize, int stars, ArrayList<String> extras) {
 		
 		this.name = name;
 		this.location = location;
@@ -38,10 +40,12 @@ public class Hotel {
 		this.roomsSize = roomsSize;
 		this.resRoomsSize = resRoomsSize;
 		this.stars = stars;
+		this.extras = extras;
 		
 		GiveDataFromResRoomsArrayToVar();
-		CreateANewTxtFileForThisHotel();
+		CreateTWOTxtFilesForThisHotel();
 		ReadTheRatingsFromTxtFile();
+		ReadDataFromDetailsTxt();
 	}
 	
 	public String getName() {
@@ -56,8 +60,24 @@ public class Hotel {
 		return street;
 	}
 
-	public double getPrice() {
+	public ArrayList<Double> getPrice() {
 		return price;
+	}
+	
+	public double getPrice1() {
+		return price.get(0);
+	}
+	
+	public double getPrice2() {
+		return price.get(1);
+	}
+	
+	public double getPrice3() {
+		return price.get(2);
+	}
+	
+	public double getPrice4() {
+		return price.get(3);
 	}
 	
 	public ArrayList<Integer> getRoomsPersonSize() {
@@ -145,6 +165,84 @@ public class Hotel {
 		return stars;
 	}
 	
+	public ArrayList<String> getAllExtras() {
+		return extras;
+	}
+	
+	public boolean hasAPool() {
+		
+		boolean c = false;
+		
+		if(extras.get(0).equals("Y")) {
+			c = true;
+		}
+		else if(extras.get(0).equals("N")) {
+			c = false;
+		}
+		
+		return c;
+	}
+	
+	public boolean hasAGym() {
+		
+		boolean c = false;
+		
+		if(extras.get(1).equals("Y")) {
+			c = true;
+		}
+		else if(extras.get(1).equals("N")) {
+			c = false;
+		}
+		
+		return c;
+	}
+	
+	public boolean hasARestaurant() {
+		
+		boolean c = false;
+		
+		if(extras.get(2).equals("Y")) {
+			c = true;
+		}
+		else if(extras.get(2).equals("N")) {
+			c = false;
+		}
+		
+		return c;
+	}
+
+	public boolean hasBreakfast() {
+	
+		boolean c = false;
+		
+		if(extras.get(3).equals("Y")) {
+			c = true;
+		}
+		else if(extras.get(3).equals("N")) {
+			c = false;
+		}
+		
+		return c;
+	}
+
+	public boolean hasLunch() {
+	
+		boolean c = false;
+		
+		if(extras.get(4).equals("Y")) {
+			c = true;
+		}
+		else if(extras.get(4).equals("N")) {
+			c = false;
+		}
+		
+		return c;
+	}
+	
+	public String getDetails() {
+		return details;
+	}
+	
 	public double GetAverageRating() {
 		
 		//cR = countRate
@@ -223,10 +321,12 @@ public class Hotel {
 
 					if(lineH.contains(h.getName())) {
 						
-						String newLineH = "  " + h.getName() + "  |  " + h.getLocation() + "  |  " + h.getStreet() + "  |  " + h.getPrice() + "  |  " + h.getAllRoomsFor1()
-										  + " , " + h.getAllRoomsFor2() + " , " + h.getAllRoomsFor3() + " , " + h.getAllRoomsFor4() + "  |  " + "$" + h.getReservedRoomsFor1()
-										  + " , " + h.getReservedRoomsFor2() + " , " + h.getReservedRoomsFor3() + ", " + h.getReservedRoomsFor4() + "$" + "  |  " 
-										  + h.getStars() + "  |";
+						String newLineH = "  " + h.getName() + "  |  " + h.getLocation() + "  |  " + h.getStreet() + "  |  " + h.getPrice1() + ", " + h.getPrice2() + ", " 
+										  + h.getPrice3() + ", " + h.getPrice4() + "  |  " + h.getAllRoomsFor1() + " , " + h.getAllRoomsFor2() + " , " + h.getAllRoomsFor3() 
+										  + " , " + h.getAllRoomsFor4() + "  |  " + "$" + h.getReservedRoomsFor1() + " , " + h.getReservedRoomsFor2() + " , " 
+										  + h.getReservedRoomsFor3() + ", " + h.getReservedRoomsFor4() + "$" + "  |  " + h.getStars() + "  |  " + h.getAllExtras().get(0) 
+										  + "  |  " + h.getAllExtras().get(1) + "  |  "  + h.getAllExtras().get(2) + "  |  " + h.getAllExtras().get(3) + "  |  " 
+										  + h.getAllExtras().get(4) + "  |  ";
 						lineH = newLineH;
 					}
 				}
@@ -254,17 +354,18 @@ public class Hotel {
 		}
 	}
 	
-	public void CreateANewTxtFileForThisHotel() {
+	public void CreateTWOTxtFilesForThisHotel() {
 		
-		String txtName = "FilesServer\\HotelsFiles\\" + getName() + "_RatesAndComms.txt";
+		//CREATION OF TXT FILE FOR RATES AND COMMS
+		String txtOneName = "FilesServer\\HotelsFiles\\" + getName() + "_RatesAndComms.txt";
 		
-		File check = new File(txtName);
+		File checkOne = new File(txtOneName);
 		
-		if(!check.exists()) {
+		if(!checkOne.exists()) {
 			
 			try {
 			
-				File f = new File(txtName);
+				File f = new File(txtOneName);
 				FileWriter writer = new FileWriter(f);
 				writer.write("  User    |    Rating    |      Comment      |");
 				
@@ -277,7 +378,32 @@ public class Hotel {
 		}
 		else {
 			
-			System.out.println("EXISTS");
+			System.out.println("EXISTS1");
+		}
+		
+		//CREATION OF TXT FILE FOR THE DETAILS
+		String txtTwoName = "FilesServer\\HotelsFiles\\" + getName() + "_Details.txt";
+				
+		File checkTwo = new File(txtTwoName);
+				
+		if(!checkTwo.exists()) {
+					
+			try {
+					
+				File f = new File(txtTwoName);
+				FileWriter writer = new FileWriter(f);
+				writer.write("  Details    |");
+			
+				writer.close();
+			}
+			catch(IOException e) {
+					
+				e.printStackTrace();
+			}
+		}
+		else {
+					
+			System.out.println("EXISTS2");
 		}
 	}
 	
@@ -399,5 +525,57 @@ public class Hotel {
 		RatesAndComms rAc = new RatesAndComms(userName, rating, comment);
 		
 		ratingsAndComms.add(rAc);
+	}
+	
+	public void ReadDataFromDetailsTxt() {
+		
+		String fileHotelDetails = "FilesServer/HotelsFiles/" + getName() + "_Details.txt";
+		ArrayList<String> detailsArray = new ArrayList<>();
+		int check = 0;
+		int c = 0;
+
+		try { 
+
+			FileReader frHD = new FileReader(fileHotelDetails);
+			BufferedReader readerHD = new BufferedReader(frHD);
+
+			boolean checkHD = false;
+			String lineHD = readerHD.readLine();
+			while(lineHD != null) {
+
+				if(checkHD) {
+
+					check = 1;
+					detailsArray.add(lineHD);
+				}
+
+				lineHD = readerHD.readLine();
+				checkHD = true;
+			}
+			
+			if(check == 1) {
+				
+				for(String d :detailsArray) {
+					
+					if(c == 0) {
+					
+						details = details + d;
+					}
+					else {
+						
+						details = details + System.lineSeparator() + d;
+					}
+					c++;
+				}
+			}
+			
+			System.out.println("Det: " + details);
+			
+			readerHD.close();
+		}
+		catch(IOException e) {
+
+			e.printStackTrace();
+		}
 	}
 }

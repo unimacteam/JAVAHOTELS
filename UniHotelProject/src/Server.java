@@ -66,7 +66,7 @@ public class Server {
 
 			e.printStackTrace();
 		}
-		
+	
 		Check();
 		
 		//CONNECT FILES TO PROGRAMM, SO IT CAN WRITE DATA TO THEM

@@ -69,10 +69,6 @@ public class FilterPanel {
 			int initp =0;
 			
 			
-			for (Hotel h: HotelsList)
-			{	if(h.getPrice()>maxp)
-				maxp=(int) h.getPrice() + 1;
-			}
 		
 			JSlider pricePerNightSlider = new JSlider(JSlider.HORIZONTAL, 	minp, maxp, initp);
 			
@@ -125,18 +121,7 @@ public class FilterPanel {
 					numberOfGuests = (Integer) roomTypeList.getSelectedItem();
 					for(Hotel h: HotelsList)
 					{
-						if (h.getLocation()==city&&h.GetAverageRating()>=ratings&&pricePerNight>=h.getPrice()) 
-						{
-							
-							 if ((numberOfGuests==2)&&(h.getAllRoomsFor2()-h.getReservedRoomsFor2()>0))
-								applicableHotels.add(h);
-							else if ((numberOfGuests==2)&&(h.getAllRoomsFor3()-h.getReservedRoomsFor3()>0))
-								applicableHotels.add(h);
-							else if ((numberOfGuests==2)&&(h.getAllRoomsFor4()-h.getReservedRoomsFor4()>0))
-								applicableHotels.add(h);
-						//	else if (numberOfGuests==1&&h.getRoomsFor1()-h.getReservedRoomsFor1()>0)
-							//	applicableHotels.add(h);
-						}
+						
 					}
 					System.out.println("Applicable hotels:");
 				

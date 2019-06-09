@@ -22,6 +22,9 @@ public class Main {
 		logInGUI.run(users, null, hotels);
 		//new MainScreenGUI(hotels, users);
 		
+		//CheckMainScreenGUI k = new CheckMainScreenGUI();
+		//k.run(hotels, users);
+		
 		//FilterPanel filters = new FilterPanel(citiesHotels, s.GetHotelsList());
 	}
 }

@@ -153,7 +153,8 @@ public class LogInGUI extends JFrame {
 				this.setVisible(false);
 				this.dispose();
 				//Hotels array is here only for this part
-				new MainScreenGUI(hotels, users);
+				MainScreenGUI mainScreenGUI = new MainScreenGUI();
+				mainScreenGUI.run(hotels, users);
 			}
 		});
 		
@@ -194,7 +195,7 @@ public class LogInGUI extends JFrame {
 				userFound = true;
 					
 				if(passCode.equals(u.getPassCode())) {
-						
+					
 					passwdFound = true;
 					activeUser=u;
 					logInSuccessful = true;

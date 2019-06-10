@@ -44,6 +44,7 @@ public class SignUpGUI extends JFrame {
 	private JButton signUpButton;
 	private JButton closeButton;
 	private JButton minimizeButton;
+	private JButton backToLogIn;
 	
 	private ArrayList<User> users;
 	private User activeUser;
@@ -195,7 +196,7 @@ public class SignUpGUI extends JFrame {
 		signUpButton.setForeground(new Color(112, 128, 144));
 		signUpButton.setBackground(new Color(169, 169, 169));
 		signUpButton.setBorder(new LineBorder(new Color(119, 136, 153), 1, true));
-		signUpButton.setBounds(203, 436, 89, 23);
+		signUpButton.setBounds(203, 436, 89, 30);
 		signUpForm.add(signUpButton);
 		
 		usernameTextField = new JTextField();
@@ -227,6 +228,14 @@ public class SignUpGUI extends JFrame {
 		lblNewLabel_1.setForeground(new Color(119, 136, 153));
 		lblNewLabel_1.setBounds(192, 27, 149, 33);
 		signUpForm.add(lblNewLabel_1);
+		
+		backToLogIn = new JButton("Back");
+		backToLogIn.setForeground(new Color(128, 128, 128));
+		backToLogIn.setBackground(new Color(217, 217, 217));
+		backToLogIn.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		backToLogIn.setBorder(null);
+		backToLogIn.setBounds(340, 475, 100, 25);
+		signUpForm.add(backToLogIn);
 	}
 	
 	public String getUserName() {
@@ -270,6 +279,14 @@ public class SignUpGUI extends JFrame {
 				LogInGUI logInGUI = new LogInGUI();
 				logInGUI.run(users, null, hotels);
 			}
+		});
+		
+		backToLogIn.addActionListener(e -> {
+			
+			this.setVisible(false);
+			this.dispose();
+			LogInGUI logInGUI = new LogInGUI();
+			logInGUI.run(users, null, hotels);
 		});
 		
 		closeButton.addActionListener(e -> {

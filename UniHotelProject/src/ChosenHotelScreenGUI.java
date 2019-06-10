@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -43,13 +44,10 @@ public class ChosenHotelScreenGUI extends JFrame {
 	 * Launch the application.
 	 */
 	public void run(ArrayList<Hotel> hotels, ArrayList<User> users, Hotel h, User u) {
-
-		this.hotels = hotels;
-		this.users = users;
 		
 		try {
 			
-			ChosenHotelScreenGUI frame = new ChosenHotelScreenGUI(h, u);
+			ChosenHotelScreenGUI frame = new ChosenHotelScreenGUI(hotels, users, h, u);
 			frame.setVisible(true);
 		}
 		catch (Exception e) {
@@ -57,13 +55,14 @@ public class ChosenHotelScreenGUI extends JFrame {
 			e.printStackTrace();
 		}
 	}
-		
-
+	
 	/**
 	 * Create the frame.
 	 */
-	public ChosenHotelScreenGUI(Hotel h, User u) {
+	public ChosenHotelScreenGUI(ArrayList<Hotel> hotels, ArrayList<User> users, Hotel h, User u) {
 		
+		this.hotels = hotels;
+		this.users = users;
 		this.h = h;
 		this.u = u;
 		
@@ -167,6 +166,21 @@ public class ChosenHotelScreenGUI extends JFrame {
 			
 			notIncludeModel.addElement("Lunch");
 		}
+		
+		if(servicesModel.isEmpty()) {
+			
+			servicesModel.addElement("No Service Found");
+		}
+		
+		if(includeModel.isEmpty()) {
+			
+			includeModel.addElement("No Food Is Included");
+		}
+
+		if(notIncludeModel.isEmpty()) {
+	
+			notIncludeModel.addElement("Every Food Is Included");
+		}
 	
 		JList servicesList = new JList(servicesModel);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, servicesList, 412, SpringLayout.NORTH, contentPane);
@@ -189,7 +203,8 @@ public class ChosenHotelScreenGUI extends JFrame {
 		detLbl.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		contentPane.add(detLbl);
 		
-		JTextArea detTxt = new JTextArea();
+		JTextArea detTxt = new JTextArea(h.getDetails());
+		detTxt.setEditable(false);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, detTxt, 165, SpringLayout.NORTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, detTxt, -360, SpringLayout.SOUTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, detLbl, 0, SpringLayout.NORTH, detTxt);
@@ -233,7 +248,7 @@ public class ChosenHotelScreenGUI extends JFrame {
 		lblPeople.setBounds(10, 37, 48, 14);
 		rsvPanel.add(lblPeople);
 		
-		ArrayList<Integer> freeRooms = new ArrayList<>();
+		Vector freeRooms = new Vector();
 		
 		if(h.GetFreeRoomsFor(1) > 0) {
 			
@@ -255,12 +270,12 @@ public class ChosenHotelScreenGUI extends JFrame {
 			freeRooms.add(4);
 		}
 		
-		comboBox = new JComboBox();
+		comboBox = new JComboBox(freeRooms);
 		comboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(70, 130, 180)));
 		comboBox.setFont(new Font("Times New Roman", Font.PLAIN, 13));
 		comboBox.setForeground(new Color(70, 130, 180));
 		comboBox.setBackground(Color.WHITE);
-		comboBox.setBounds(90, 34, 46, 20);
+		comboBox.setBounds(70, 34, 50, 20);
 		rsvPanel.add(comboBox);
 		
 		JLabel lblCard = new JLabel("Card");
@@ -325,7 +340,14 @@ public class ChosenHotelScreenGUI extends JFrame {
 		notIncludeList.setBackground(new Color(240, 248, 255));
 		contentPane.add(notIncludeList);
 		
-		JLabel starLabel = new JLabel("Stars: " + h.getStars());
+		String stringStars = "";
+		
+		for(int i = 0; i < h.getStars(); i++) {
+			
+			stringStars += "*";
+		}
+		
+		JLabel starLabel = new JLabel("Stars: " + stringStars);
 		sl_contentPane.putConstraint(SpringLayout.WEST, starLabel, 190, SpringLayout.WEST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, starLabel, 100, SpringLayout.EAST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, starLabel, 0, SpringLayout.NORTH, locLbl);
@@ -391,9 +413,9 @@ public class ChosenHotelScreenGUI extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.WEST, btnNewButton, 710, SpringLayout.WEST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, btnNewButton, -300, SpringLayout.SOUTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, btnNewButton, -70, SpringLayout.EAST, contentPane);
+		btnNewButton.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(70, 130, 180)));
 		btnNewButton.setBackground(new Color(240, 248, 255));
 		btnNewButton.setForeground(new Color(70, 130, 180));
-		btnNewButton.setBorder(null);
 		contentPane.add(btnNewButton);
 		
 		minBtn = new JButton("-");

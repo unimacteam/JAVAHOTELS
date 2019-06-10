@@ -18,13 +18,10 @@ public class Main {
 		}
 		
 		//users and active users array needed, active users can be created on launch. Use // to run main without this.
-		LogInGUI logInGUI = new LogInGUI();
-		logInGUI.run(users, null, hotels);
-		//new MainScreenGUI(hotels, users);
-		
-		//CheckMainScreenGUI k = new CheckMainScreenGUI();
-		//k.run(hotels, users);
-		
-		//FilterPanel filters = new FilterPanel(citiesHotels, s.GetHotelsList());
+		//LogInGUI logInGUI = new LogInGUI();
+		//logInGUI.run(users, null, hotels);
+	
+		MainScreenGUI k = new MainScreenGUI();
+		k.run(hotels, users);
 	}
 }

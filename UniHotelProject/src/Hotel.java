@@ -16,10 +16,6 @@ public class Hotel {
 	private String street = "";
 	private ArrayList<Double> price = new ArrayList<>();
 	private ArrayList<Integer> roomsSize = new ArrayList<>();
-	private int roomsFor1 = 0;
-	private int roomsFor2 = 0;
-	private int roomsFor3 = 0;
-	private int roomsFor4 = 0;
 	private ArrayList<Integer> resRoomsSize = new ArrayList<>();
 	private int resRoomsFor1 = 0;
 	private int resRoomsFor2 = 0;
@@ -64,22 +60,10 @@ public class Hotel {
 		return price;
 	}
 	
-	public double getPrice1() {
-		return price.get(0);
+	public double getPriceFor(int i) {
+		return price.get(i-1);
 	}
-	
-	public double getPrice2() {
-		return price.get(1);
-	}
-	
-	public double getPrice3() {
-		return price.get(2);
-	}
-	
-	public double getPrice4() {
-		return price.get(3);
-	}
-	
+
 	public ArrayList<Integer> getRoomsPersonSize() {
 		return roomsSize;
 	}
@@ -96,33 +80,12 @@ public class Hotel {
 		return c;
 	}
 	
-	public int getAllRoomsFor1() {
-		
-		roomsFor1 = roomsSize.get(0);
-		
-		return roomsFor1;
-	}
+	public int getAllRoomsFor(int i) {
 	
-	public int getAllRoomsFor2() {
-		
-		roomsFor2 = roomsSize.get(1);
-		
-		return roomsFor2;
-	}
-	
-	public int getAllRoomsFor3() {
-		
-		roomsFor3 = roomsSize.get(2);
-		
-		return roomsFor3;
+		return roomsSize.get(i-1);
 	}
 
-	public int getAllRoomsFor4() {
 	
-		roomsFor4 = roomsSize.get(3);
-	
-		return roomsFor4;
-	}
 	
 	public ArrayList<Integer> getReservedRoomsPersonSize() {
 		return resRoomsSize;
@@ -145,22 +108,28 @@ public class Hotel {
 		resRoomsFor4 = resRoomsSize.get(3);
 	}
 	
-	public int getReservedRoomsFor1() {
-		return resRoomsFor1;
+	public int getReservedRoomsFor(int i) {
+		
+		if(i == 1) {	
+			
+			return resRoomsFor1;
+		}
+		else if(i == 2) {
+		
+			return resRoomsFor2;
+		}
+		else if(i == 3) {
+		
+			return resRoomsFor3;
+		}
+		else if( i==4 ) {
+			
+			return resRoomsFor4;
+		}
+		
+		return -1;
 	}
-	
-	public int getReservedRoomsFor2() {
-		return resRoomsFor2;
-	}
-	
-	public int getReservedRoomsFor3() {
-		return resRoomsFor3;
-	}
-	
-	public int getReservedRoomsFor4() {
-		return resRoomsFor4;
-	}
-	
+
 	public int getStars() {
 		return stars;
 	}
@@ -268,39 +237,69 @@ public class Hotel {
 		return aR;
 	}
 	
-	public int UserReservedAtThisHotelAndReturnFreeRooms(User u, Hotel h, int numOfPersons) {
+	public int GetFreeRoomsFor(int i) {
 		
-		int roomsLeft = 0;
-		int c = 0;
+		//LEFT HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		if(i == 1) {	
+			
+			return (roomsSize.get(i - 1) - resRoomsFor1);
+		}
+		else if(i == 2) {
 		
-		usersInThisHotel.put(numOfPersons, u);
+			return (roomsSize.get(i - 1) - resRoomsFor2);
+		}
+		else if(i == 3) {
+		
+			return (roomsSize.get(i - 1) - resRoomsFor3);
+		}
+		else if( i==4 ) {
+			
+			return (roomsSize.get(i - 1) - resRoomsFor4);
+		}
+		
+		return -1;
+	}
+	
+	public void UserReservedAtThisHotel(User u, Hotel h, int numOfPersons) {
+		
+		System.out.println("PP: " + getAllRoomsFor(3) + " !! " + resRoomsFor3);
 		
 		if(numOfPersons == 1) {
 			
-			resRoomsFor1++;
-			c = resRoomsFor1;
+			if(resRoomsFor1 < getAllRoomsFor(1)) {
+				
+				resRoomsFor1++;
+				usersInThisHotel.put(numOfPersons, u);
+			}
 		}
 		else if(numOfPersons == 2) {
 			
-			resRoomsFor2++;
-			c = resRoomsFor2;
+			if(resRoomsFor2 < getAllRoomsFor(2)) {
+			
+				resRoomsFor2++;
+				usersInThisHotel.put(numOfPersons, u);
+			}
 		}
 		else if(numOfPersons == 3) {
 			
-			resRoomsFor3++;
-			c = resRoomsFor3;
+			if(resRoomsFor3 < getAllRoomsFor(3)) {
+				
+				resRoomsFor3++;
+				usersInThisHotel.put(numOfPersons, u);
+			}
 		}
 		else if(numOfPersons == 4) {
 			
-			resRoomsFor4++;
-			c = resRoomsFor4;
+			if(resRoomsFor4 < getAllRoomsFor(4)) {
+				
+				resRoomsFor4++;
+				usersInThisHotel.put(numOfPersons, u);
+			}
 		}
 		
-		roomsLeft = getAllRooms() - getAllResRooms();
+		System.out.println("GG: " + getAllRoomsFor(3) + " !! " + resRoomsFor3);
 		
 		ReloadDataInHotelFile(u, h);
-		
-		return roomsLeft;
 	}
 	
 	public void ReloadDataInHotelFile(User u, Hotel h) {
@@ -321,10 +320,10 @@ public class Hotel {
 
 					if(lineH.contains(h.getName())) {
 						
-						String newLineH = "  " + h.getName() + "  |  " + h.getLocation() + "  |  " + h.getStreet() + "  |  " + h.getPrice1() + ", " + h.getPrice2() + ", " 
-										  + h.getPrice3() + ", " + h.getPrice4() + "  |  " + h.getAllRoomsFor1() + " , " + h.getAllRoomsFor2() + " , " + h.getAllRoomsFor3() 
-										  + " , " + h.getAllRoomsFor4() + "  |  " + "$" + h.getReservedRoomsFor1() + " , " + h.getReservedRoomsFor2() + " , " 
-										  + h.getReservedRoomsFor3() + ", " + h.getReservedRoomsFor4() + "$" + "  |  " + h.getStars() + "  |  " + h.getAllExtras().get(0) 
+						String newLineH = "  " + h.getName() + "  |  " + h.getLocation() + "  |  " + h.getStreet() + "  |  " + h.getPriceFor(1) + ", " + h.getPriceFor(2) + ", " 
+										  + h.getPriceFor(3) + ", " + h.getPriceFor(4) + "  |  " + h.getAllRoomsFor(1) + " , " + h.getAllRoomsFor(2) + " , " + h.getAllRoomsFor(3) 
+										  + " , " + h.getAllRoomsFor(4) + "  |  " + "$" + h.getReservedRoomsFor(1) + " , " + h.getReservedRoomsFor(2) + " , " 
+										  + h.getReservedRoomsFor(3) + ", " + h.getReservedRoomsFor(4) + "$" + "  |  " + h.getStars() + "  |  " + h.getAllExtras().get(0) 
 										  + "  |  " + h.getAllExtras().get(1) + "  |  "  + h.getAllExtras().get(2) + "  |  " + h.getAllExtras().get(3) + "  |  " 
 										  + h.getAllExtras().get(4) + "  |  ";
 						lineH = newLineH;
@@ -426,7 +425,7 @@ public class Hotel {
 					
 					userRCFound = true;
 					
-					String newLineHRC = "  " + u.getUserName() + "  |  " + uRating + "  |  " + uComment + "  |";
+					String newLineHRC = "  " + u.getUserName() + "  |  " + uRating + "  |  $" + uComment + "$  |";
 					lineHRC = newLineHRC;
 				}
 				
@@ -440,7 +439,7 @@ public class Hotel {
 				
 				System.out.println("In");
 				BufferedWriter bw1 = new BufferedWriter(new FileWriter(fileHotel, true));
-				bw1.append(System.lineSeparator() + "  " + u.getUserName() + "  |  " + uRating + "  |  " + uComment + "  |");
+				bw1.append(System.lineSeparator() + "  " + u.getUserName() + "  |  " + uRating + "  |  $" + uComment + "$  |");
 				
 				bw1.close();
 			}
@@ -510,6 +509,9 @@ public class Hotel {
 		int rating = 0;
 		String comment = "";
 		
+		comment = line.substring(line.indexOf("$") + 1, line.lastIndexOf("$"));
+		line = line.replaceAll("\\$" + comment + "\\$", "");
+		
 		line = line.replaceAll("\\s+", "");
 		
 		userName = line.substring(0, line.indexOf("|"));
@@ -519,10 +521,9 @@ public class Hotel {
 		String rateS = line.substring(0, line.indexOf("|"));
 		line = line.replaceAll(rateS + "\\|", "");
 		
-		comment = line.substring(0, line.indexOf("|"));
-		line = line.replaceAll(comment + "\\|", "");
-		
 		RatesAndComms rAc = new RatesAndComms(userName, rating, comment);
+		
+		System.out.println(comment);
 		
 		ratingsAndComms.add(rAc);
 	}

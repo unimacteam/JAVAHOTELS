@@ -16,8 +16,8 @@ import javax.swing.event.ChangeListener;
 public class FilterPanel {
 
 		String city;
-		float ratings;// this or better
-		float pricePerNight;
+		double ratings;// this or better
+		double pricePerNight;
 		String  roomType;
 		ArrayList<Hotel> applicableHotels;
 		int numberOfGuests;
@@ -40,7 +40,15 @@ public class FilterPanel {
 		private JComboBox cityList;
 		private JComboBox roomTypeList ;
 		//private JComboBox pricePerNightList;
+		
+		
+		
 		private JSlider pricePerNightSlider;
+		int minp;
+		int maxp;
+		int initp;
+		
+		
 		private JComboBox ratingsList;
 
 		private JButton applyFiltersBtn = new JButton("Apply Filters");
@@ -62,15 +70,23 @@ public class FilterPanel {
 			filterFrame.setBounds(200,100,400,350);
 			
 			
+			//Calculate max and min for slider (initial)
+			maxp  =-1;
 			
-			
-			int minp = 0;
-			int maxp = -1;
-			int initp =0;
-			
+			for (Hotel h: HotelsList)
+			{	if(h.getPriceFor(1)>maxp)
+				maxp=(int) h.getPriceFor(1) + 1;
+			}
+		
+            minp = maxp;
+            for (Hotel h: HotelsList)
+            {    if(h.getPriceFor(1)<minp)
+                minp=(int) h.getPriceFor(1);
+            }
+            initp=minp;
 			
 		
-			JSlider pricePerNightSlider = new JSlider(JSlider.HORIZONTAL, 	minp, maxp, initp);
+			pricePerNightSlider = new JSlider(JSlider.HORIZONTAL, 	minp, maxp, initp);
 			
 			
 			//Label bounds
@@ -119,9 +135,16 @@ public class FilterPanel {
 					ratings = (Integer) ratingsList.getSelectedItem();
 					//pricePerNight = (Integer) pricePerNightList.getSelectedItem();
 					numberOfGuests = (Integer) roomTypeList.getSelectedItem();
+					
 					for(Hotel h: HotelsList)
 					{
-						
+						if ((h.getLocation()==city&&h.GetAverageRating()>=ratings&&pricePerNight>=h.getPriceFor(numberOfGuests))) 
+						{
+							
+							 if ((h.getAllRoomsFor(numberOfGuests)-h.getReservedRoomsFor(numberOfGuests)>0))
+								applicableHotels.add(h);
+							
+						}
 					}
 					System.out.println("Applicable hotels:");
 				
@@ -146,7 +169,33 @@ public class FilterPanel {
 			
 			pricePerNightSlider.setBounds(180, 50, 250, 30);
 				container.add(pricePerNightSlider);
-		
+			
+				
+				
+				
+				
+			roomTypeList.addActionListener(new ActionListener(){
+				public void actionPerformed(ActionEvent e) {
+					
+					maxp  =-1;
+			
+					int nOG;
+					nOG = (Integer) roomTypeList.getSelectedItem();
+					for (Hotel h: HotelsList)
+					{	if(h.getPriceFor(nOG)>maxp)
+							maxp=(int) h.getPriceFor(nOG) + 1;
+					}
+		            minp = maxp;
+		            for (Hotel h: HotelsList)
+		            {    if(h.getPriceFor(nOG)<minp)
+		                minp=(int) h.getPriceFor(nOG);
+		            }
+		            initp=minp;
+		            pricePerNightSlider = new JSlider(JSlider.HORIZONTAL, 	minp, maxp, initp);
+		            System.out.println("new slider created");
+				}	
+				
+			});
 			container.add(logo);
 			container.add(cityL);
 			container.add(roomTypeL);
@@ -165,20 +214,6 @@ public class FilterPanel {
 			
 		}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
+
 

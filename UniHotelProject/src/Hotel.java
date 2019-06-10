@@ -81,7 +81,7 @@ public class Hotel {
 	}
 	
 	public int getAllRoomsFor(int i) {
-	
+
 		return roomsSize.get(i-1);
 	}
 
@@ -126,7 +126,7 @@ public class Hotel {
 			
 			return resRoomsFor4;
 		}
-		
+
 		return -1;
 	}
 

@@ -256,12 +256,12 @@ public class SignUpGUI extends JFrame {
 		
 		signUpButton.addActionListener(e -> {
 			
-			userName = usernameTextField.getText();
+			userName = usernameTextField.getText().trim();
 			passFromField = passwordField.getPassword();
 			passCode = new String(passFromField);
-			email = emailTextField.getText();
-			name = nameTextField.getText();
-			surname = surnameTextField.getText();
+			email = emailTextField.getText().trim();
+			name = nameTextField.getText().trim();
+			surname = surnameTextField.getText().trim();
 			
 			if(this.SignUp(users)) {
 		
@@ -287,6 +287,8 @@ public class SignUpGUI extends JFrame {
 		
 		boolean inUseUserN = false;
 		boolean inUseUserE = false;
+		boolean emptyField = false;
+		ArrayList<String> emptyFields = new ArrayList<>();
 		boolean signUpSuccessful = false;
 		
 		//while attempting to sign up
@@ -309,11 +311,25 @@ public class SignUpGUI extends JFrame {
 				inUseUserE = true;
 				break;
 			}
-			
-		}
+			}
+		if (name.equals(""))
+			emptyFields.add("NAME");
+		if (surname.equals(""))
+			emptyFields.add("SURNAME");
+		if (userName.equals(""))
+			emptyFields.add("USERNAME");
+		if (email.equals(""))
+			emptyFields.add("EMAIL");
+		if (passCode.equals(""))
+			emptyFields.add("PASSWORD");
+	
+		
+		if (!emptyFields.isEmpty())
+			EmptyFieldsPopUp(emptyFields);
+		
 		
 		//if everything ok, register new user
-		if (!inUseUserN && !inUseUserE) {
+		if (!inUseUserN && !inUseUserE && emptyFields.isEmpty()) {
 			
 			User newUser = new User(userName, passCode, email, name, surname); 
 			users.add(newUser);
@@ -356,6 +372,17 @@ public class SignUpGUI extends JFrame {
 			
 			JOptionPane.showMessageDialog(null, "Email already in use!");
 		}
+	}
+	
+public void EmptyFieldsPopUp(ArrayList<String> EmptyFields) {
+			
+	String message = new String("The following fields are empty:\n");
+	
+	for(String s: EmptyFields)
+		message += s + "\n";
+	JOptionPane.showMessageDialog(null, message);
+		
+		
 	}
 	
 	public User GetUserThatWantsToSignUp() {

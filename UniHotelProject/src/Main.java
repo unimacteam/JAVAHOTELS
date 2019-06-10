@@ -21,10 +21,10 @@ public class Main {
 		//LogInGUI logInGUI = new LogInGUI();
 		//logInGUI.run(users, null, hotels);
 	
-		//MainScreenGUI k1 = new MainScreenGUI();
-		//k1.run(hotels, users);
+		MainScreenGUI k1 = new MainScreenGUI();
+		k1.run(hotels, users, users.get(0));
 		
-		ChosenHotelScreenGUI k2 = new ChosenHotelScreenGUI();
-		k2.run(hotels, users, hotels.get(1), users.get(0));
+		//ChosenHotelScreenGUI k2 = new ChosenHotelScreenGUI();
+		//k2.run(hotels, users, hotels.get(1), users.get(0));
 	}
 }

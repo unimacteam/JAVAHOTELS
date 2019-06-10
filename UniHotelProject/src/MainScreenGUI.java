@@ -52,6 +52,7 @@ public class MainScreenGUI extends JFrame {
 	private JRadioButton rdbtnLunch;
 	private ArrayList<Hotel> hotels = new ArrayList();
 	private ArrayList<User> users = new ArrayList();
+	private User u;
 	private JPanel listPanel;
 	private SpringLayout spr ;
 	private JTextField PriceF;
@@ -59,10 +60,10 @@ public class MainScreenGUI extends JFrame {
 	private int numberOfGuests = 1;
 	private int pricePerNight;
 	private int avgRating = 3;
-	private ArrayList<Hotel> applicableHotels;
+	private ArrayList<Hotel> applicableHotels = new ArrayList<>();
 	private String city;
 	private int extras[] = {0, 0, 0, 0 , 0};
-	DefaultListModel listModel;
+	private DefaultListModel listModel;
 	private int maxp;
 	private int minp;
 	private int initp;
@@ -72,11 +73,11 @@ public class MainScreenGUI extends JFrame {
 		
 	}
 	
-	public void run(ArrayList<Hotel> hotels, ArrayList<User> users) {
+	public void run(ArrayList<Hotel> hotels, ArrayList<User> users, User u) {
 		
 		try {
 		
-			MainScreenGUI frame = new MainScreenGUI(hotels, users);
+			MainScreenGUI frame = new MainScreenGUI(hotels, users, u);
 			frame.setVisible(true);
 		}
 		catch (Exception e) {
@@ -88,10 +89,11 @@ public class MainScreenGUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MainScreenGUI(ArrayList<Hotel> hotels, ArrayList<User> users) {
+	public MainScreenGUI(ArrayList<Hotel> hotels, ArrayList<User> users, User u) {
 		
 		this.hotels = hotels;
 		this.users = users;
+		this.u = u;
 
 		setResizable(false);
 		setUndecorated(true);
@@ -421,6 +423,11 @@ public class MainScreenGUI extends JFrame {
 		spr.putConstraint(SpringLayout.SOUTH, button, 0, SpringLayout.NORTH, listPanel);
 		spr.putConstraint(SpringLayout.EAST, button, 0, SpringLayout.WEST, btnNewButton_2);
 		contentPane.add(button);	
+		
+		for(Hotel h :hotels) {
+			
+			applicableHotels.add(h);
+		}
 	}
 	
 	/**
@@ -455,7 +462,10 @@ public class MainScreenGUI extends JFrame {
 		
 		btnApply.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e)
-			{	city= (String) locationBox.getSelectedItem();
+			{	
+				applicableHotels.clear();
+				
+				city= (String) locationBox.getSelectedItem();
 				numberOfGuests = roomSizeBox.getSelectedIndex() + 1 ;
 				stars = starsBox.getSelectedIndex()+1;
 				extras[0] = rdbtnGym.isSelected() ? 1 : 0;
@@ -484,8 +494,10 @@ public class MainScreenGUI extends JFrame {
 								hasAllExtras=false;
 						}
 						if(hasAllExtras)	
+						{
+							System.out.println(h.getName());
 							applicableHotels.add(h);
-						
+						}
 					}
 				}
 
@@ -498,16 +510,21 @@ public class MainScreenGUI extends JFrame {
 		});
 		
 		
-		btnEnter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e)
-			{for (Hotel h: applicableHotels)
-				if(h.getName().equals(hotelList.getSelectedValue()))
-					{//new ChosenHotelScreenGUI(h);
-					break;}
-			
+		btnEnter.addActionListener(e ->
+			{
+				for (Hotel h: applicableHotels) {
+				if(h.getName().equals(hotelList.getSelectedValue())) {
+					
+					this.setVisible(false);
+					this.dispose();
+					ChosenHotelScreenGUI chosenHScrGUI = new ChosenHotelScreenGUI();
+					System.out.println(h.getName());
+					chosenHScrGUI.run(hotels, users, h, u);
+					break;
+				}
 			}
 			
-		});
+			});
 		
 
 		priceSlider.addChangeListener(new ChangeListener(){

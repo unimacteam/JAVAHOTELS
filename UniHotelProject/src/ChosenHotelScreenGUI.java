@@ -418,7 +418,7 @@ public class ChosenHotelScreenGUI extends JFrame {
 			this.setVisible(false);
 			this.dispose();
 			MainScreenGUI mainScreenGUI = new MainScreenGUI();
-			mainScreenGUI.run(hotels, users);
+			mainScreenGUI.run(hotels, users, u);
 		});
 		
 		xBtn.addActionListener(e -> {

@@ -1,1 +1,3 @@
   User    |    Rating    |      Comment      |
+  J  |  5  |  $$  |
+  Zeles  |  4  |  $$  |

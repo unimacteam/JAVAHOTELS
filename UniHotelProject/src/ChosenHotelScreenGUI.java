@@ -1,14 +1,19 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -35,6 +40,14 @@ public class ChosenHotelScreenGUI extends JFrame {
 	private JComboBox comboBox;
 	private JList userRList;
 	private JScrollPane scroller;
+	private JTextArea textArea;
+	private JTextArea writeCommentArea;
+	private JComboBox yourRateComboBox;
+	private JButton addMyRateBtn;
+	
+	private ArrayList<String> userName = new ArrayList<>();
+	private ArrayList<String> comment = new ArrayList<>();
+	private DefaultListModel<String> ratesList = new DefaultListModel<>();
 	
 	public ChosenHotelScreenGUI() {
 		
@@ -65,6 +78,9 @@ public class ChosenHotelScreenGUI extends JFrame {
 		this.users = users;
 		this.h = h;
 		this.u = u;
+		
+		DefaultListCellRenderer listRenderer = new DefaultListCellRenderer();
+	    listRenderer.setHorizontalAlignment(DefaultListCellRenderer.CENTER);
 		
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,7 +119,7 @@ public class ChosenHotelScreenGUI extends JFrame {
 		locLbl.setFont(new Font("Times New Roman", Font.PLAIN, 19));
 		contentPane.add(locLbl);
 		
-		JLabel strLbl = new JLabel("Street: " + h.getStreet());
+		JLabel strLbl = new JLabel("Street:  " + h.getStreet());
 		sl_contentPane.putConstraint(SpringLayout.NORTH, strLbl, 10, SpringLayout.SOUTH, locLbl);
 		sl_contentPane.putConstraint(SpringLayout.WEST, strLbl, 10, SpringLayout.WEST, locLbl);
 		sl_contentPane.putConstraint(SpringLayout.EAST, strLbl, -410, SpringLayout.EAST, contentPane);
@@ -128,7 +144,7 @@ public class ChosenHotelScreenGUI extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.WEST, servLbl, 85, SpringLayout.WEST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, servLbl, 85, SpringLayout.SOUTH, contentPane);
 		servLbl.setForeground(new Color(70, 130, 180));
-		servLbl.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		servLbl.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		contentPane.add(servLbl);
 		
 		DefaultListModel includeModel = new DefaultListModel();
@@ -139,11 +155,12 @@ public class ChosenHotelScreenGUI extends JFrame {
 		
 			servicesModel.addElement("Gym");
 		}
-		System.out.println(h.hasAGym() + " " + h.hasAPool());
+		
 		if(h.hasAPool()) {
 			
 			servicesModel.addElement("Pool");
 		}
+		
 		if(h.hasARestaurant()) {
 		
 			servicesModel.addElement("Restaurant");
@@ -169,17 +186,20 @@ public class ChosenHotelScreenGUI extends JFrame {
 		
 		if(servicesModel.isEmpty()) {
 			
-			servicesModel.addElement("No Service Found");
+			servicesModel.addElement("  THIS HOTEL HAS");
+			servicesModel.addElement("     NO SERVICES");
 		}
 		
 		if(includeModel.isEmpty()) {
 			
-			includeModel.addElement("No Food Is Included");
+			includeModel.addElement("        NO FOOD IS");
+			includeModel.addElement("         INCLUDED");
 		}
 
 		if(notIncludeModel.isEmpty()) {
 	
-			notIncludeModel.addElement("Every Food Is Included");
+			notIncludeModel.addElement("    EVERY FOOD IS");
+			notIncludeModel.addElement("        INCUDED");
 		}
 	
 		JList servicesList = new JList(servicesModel);
@@ -192,15 +212,17 @@ public class ChosenHotelScreenGUI extends JFrame {
 		servicesList.setForeground(new Color(70, 130, 180));
 		servicesList.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(70, 130, 180)));
 		servicesList.setBackground(new Color(240, 248, 255));
+		servicesList.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		servicesList.setSelectionModel(new NoSelectionModel());
 		contentPane.add(servicesList);
 		
-		JLabel detLbl = new JLabel("Details");
+		JLabel detLbl = new JLabel("HOTEL DETAILS");
 		sl_contentPane.putConstraint(SpringLayout.NORTH, detLbl, 140, SpringLayout.NORTH, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.WEST, detLbl, -40, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.WEST, detLbl, -60, SpringLayout.WEST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, detLbl, 0, SpringLayout.EAST, locLbl);
 		detLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		detLbl.setForeground(new Color(70, 130, 180));
-		detLbl.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		detLbl.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		contentPane.add(detLbl);
 		
 		JTextArea detTxt = new JTextArea(h.getDetails());
@@ -213,6 +235,7 @@ public class ChosenHotelScreenGUI extends JFrame {
 		detTxt.setForeground(new Color(70, 130, 180));
 		detTxt.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(70, 130, 180)));
 		detTxt.setBackground(new Color(240, 248, 255));
+		detTxt.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		contentPane.add(detTxt);
 		
 		JLabel lblFood = new JLabel("Food");
@@ -221,7 +244,7 @@ public class ChosenHotelScreenGUI extends JFrame {
 		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblFood, 0, SpringLayout.SOUTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, lblFood, -100, SpringLayout.EAST, contentPane);
 		lblFood.setForeground(new Color(70, 130, 180));
-		lblFood.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		lblFood.setFont(new Font("Times New Roman", Font.PLAIN, 18));
 		lblFood.setHorizontalAlignment(SwingConstants.CENTER);
 		contentPane.add(lblFood);
 		
@@ -237,14 +260,14 @@ public class ChosenHotelScreenGUI extends JFrame {
 		
 		JLabel lblReservation = new JLabel("RESERVATION");
 		lblReservation.setForeground(new Color(70, 130, 180));
-		lblReservation.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 13));
+		lblReservation.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 17));
 		lblReservation.setHorizontalAlignment(SwingConstants.CENTER);
 		lblReservation.setBounds(30, 0, 140, 26);
 		rsvPanel.add(lblReservation);
 		
 		JLabel lblPeople = new JLabel("People");
 		lblPeople.setForeground(new Color(70, 130, 180));
-		lblPeople.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+		lblPeople.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		lblPeople.setBounds(10, 37, 48, 14);
 		rsvPanel.add(lblPeople);
 		
@@ -276,11 +299,13 @@ public class ChosenHotelScreenGUI extends JFrame {
 		comboBox.setForeground(new Color(70, 130, 180));
 		comboBox.setBackground(Color.WHITE);
 		comboBox.setBounds(70, 34, 50, 20);
+	    comboBox.setRenderer(listRenderer);
+	    comboBox.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		rsvPanel.add(comboBox);
 		
 		JLabel lblCard = new JLabel("Card");
 		lblCard.setForeground(new Color(70, 130, 180));
-		lblCard.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+		lblCard.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		lblCard.setBounds(10, 77, 41, 14);
 		rsvPanel.add(lblCard);
 		
@@ -296,8 +321,8 @@ public class ChosenHotelScreenGUI extends JFrame {
 		checkoutBtn.setBackground(new Color(70, 130, 180));
 		checkoutBtn.setBorder(null);
 		checkoutBtn.setForeground(new Color(240, 248, 255));
-		checkoutBtn.setFont(new Font("Times New Roman", Font.PLAIN, 12));
-		checkoutBtn.setBounds(60, 125, 84, 23);
+		checkoutBtn.setFont(new Font("Times New Roman", Font.PLAIN, 17));
+		checkoutBtn.setBounds(60, 115, 84, 23);
 		rsvPanel.add(checkoutBtn);
 		
 		JLabel lblIncludes = new JLabel("Includes:");
@@ -326,6 +351,8 @@ public class ChosenHotelScreenGUI extends JFrame {
 		includeList.setBackground(new Color(240, 248, 255));
 		includeList.setForeground(new Color(70, 130, 180));
 		includeList.setSelectionForeground(new Color(240, 248, 255));
+		includeList.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		includeList.setSelectionModel(new NoSelectionModel());	
 		contentPane.add(includeList);
 		
 		JList notIncludeList = new JList(notIncludeModel);
@@ -338,6 +365,8 @@ public class ChosenHotelScreenGUI extends JFrame {
 		notIncludeList.setForeground(new Color(70, 130, 180));
 		notIncludeList.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(70, 130, 180)));
 		notIncludeList.setBackground(new Color(240, 248, 255));
+		notIncludeList.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+		notIncludeList.setSelectionModel(new NoSelectionModel());	
 		contentPane.add(notIncludeList);
 		
 		String stringStars = "";
@@ -383,10 +412,36 @@ public class ChosenHotelScreenGUI extends JFrame {
 		lblUsersComments.setFont(new Font("Times New Roman", Font.PLAIN, 17));
 		contentPane.add(lblUsersComments);
 		
-		DefaultListModel model = new DefaultListModel();
+		for(RatesAndComms rAC : h.getRatesAndComms()) {
+			
+			if(rAC.getUserName().equals(u.getUserName())) {
+				
+				ratesList.addElement("-  " + rAC.getUserName() + "  |  " + rAC.getRating() + "/5");
+			}
+			else {
+			
+				ratesList.addElement(rAC.getUserName() + "  |  " + rAC.getRating() + "/5");
+			}
+			
+			userName.add(rAC.getUserName());
+			comment.add(rAC.getComment());
+		}
 		
-		userRList = new JList();
+		if(ratesList.isEmpty()) {
+			
+			ratesList.addElement("   THIS HOTEL HAS NO");
+			ratesList.addElement("         RATINGS YET");
+		}
+		
+		userRList = new JList(ratesList);
 		userRList.setBackground(new Color(240, 248, 255));
+		userRList.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		
+		if(ratesList.get(0).equals("   THIS HOTEL HAS NO")) {
+			
+			userRList.setSelectionModel(new NoSelectionModel());
+			userRList.setSelectionMode(new NoSelectionModel().SINGLE_INTERVAL_SELECTION);;
+		}
 		
 		scroller = new JScrollPane(userRList);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, scroller, 165, SpringLayout.NORTH, contentPane);
@@ -398,13 +453,14 @@ public class ChosenHotelScreenGUI extends JFrame {
 		scroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		contentPane.add(scroller);
 		
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
 		textArea.setEditable(false);
 		textArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(70, 130, 180)));
 		textArea.setBackground(new Color(240, 248, 255));
+		textArea.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		sl_contentPane.putConstraint(SpringLayout.NORTH, textArea, 400, SpringLayout.NORTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.WEST, textArea, 470, SpringLayout.WEST, contentPane);
-		sl_contentPane.putConstraint(SpringLayout.SOUTH, textArea, -100, SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, textArea, -150, SpringLayout.SOUTH, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.EAST, textArea, -50, SpringLayout.EAST, contentPane);
 		contentPane.add(textArea);
 		
@@ -430,6 +486,49 @@ public class ChosenHotelScreenGUI extends JFrame {
 		minBtn.setBackground(new Color(240, 248, 255));
 		contentPane.add(minBtn);
 		
+		JLabel lblOfRating = new JLabel("YOUR RATING HERE");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, lblOfRating, 360, SpringLayout.NORTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.WEST, lblOfRating, 545, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, lblOfRating, 0, SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, lblOfRating, 0, SpringLayout.EAST, contentPane);
+		lblOfRating.setForeground(new Color(70, 130, 180));
+		lblOfRating.setFont(new Font("Times New Roman", Font.PLAIN, 17));
+		contentPane.add(lblOfRating);
+		
+		String [] ratingInts = {"5", "4", "3", "2", "1"};
+		yourRateComboBox = new JComboBox(ratingInts);
+		sl_contentPane.putConstraint(SpringLayout.NORTH, yourRateComboBox, 470, SpringLayout.NORTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.WEST, yourRateComboBox, 480, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, yourRateComboBox, -105, SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, yourRateComboBox, -360, SpringLayout.EAST, contentPane);
+		yourRateComboBox.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(70, 130, 180)));
+		yourRateComboBox.setFont(new Font("Times New Roman", Font.PLAIN, 13));
+		yourRateComboBox.setForeground(new Color(70, 130, 180));
+		yourRateComboBox.setBackground(Color.WHITE);
+		yourRateComboBox.setFont(new Font("Times New Roman", Font.PLAIN, 17));
+	    yourRateComboBox.setRenderer(listRenderer);
+		contentPane.add(yourRateComboBox);
+		
+		writeCommentArea = new JTextArea();
+		writeCommentArea.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(70, 130, 180)));
+		writeCommentArea.setBackground(new Color(240, 248, 255));
+		writeCommentArea.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		sl_contentPane.putConstraint(SpringLayout.NORTH, writeCommentArea, 500, SpringLayout.NORTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.WEST, writeCommentArea, 470, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, writeCommentArea, -50, SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, writeCommentArea, -50, SpringLayout.EAST, contentPane);
+		contentPane.add(writeCommentArea);
+		
+		addMyRateBtn = new JButton("ADD MY RATE");
+		sl_contentPane.putConstraint(SpringLayout.NORTH, addMyRateBtn, 470, SpringLayout.NORTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.WEST, addMyRateBtn, 710, SpringLayout.WEST, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.SOUTH, addMyRateBtn, -105, SpringLayout.SOUTH, contentPane);
+		sl_contentPane.putConstraint(SpringLayout.EAST, addMyRateBtn, -50, SpringLayout.EAST, contentPane);
+		addMyRateBtn.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(70, 130, 180)));
+		addMyRateBtn.setBackground(new Color(240, 248, 255));
+		addMyRateBtn.setForeground(new Color(70, 130, 180));
+		contentPane.add(addMyRateBtn);
+		
 		createEvents();
 	}
 	
@@ -442,6 +541,133 @@ public class ChosenHotelScreenGUI extends JFrame {
 			MainScreenGUI mainScreenGUI = new MainScreenGUI();
 			mainScreenGUI.run(hotels, users, u);
 		});
+	
+		textArea.addKeyListener(new KeyAdapter() {
+	      
+			@Override
+			public void keyPressed(KeyEvent e) {
+
+				int key = e.getKeyCode();
+
+	            /* Restrict input to only integers */
+	            if (key < 96 && key > 105) e.setKeyChar(' ');
+	        };
+	    });
+		
+		checkoutBtn.addActionListener(e -> {
+		
+			int people = (Integer) comboBox.getSelectedItem();
+			String card = cardField.getText();
+			
+			if(card.length() > 15 && card.length() < 17) {
+				
+				System.out.println("JJ");
+			}
+			else {
+				
+				JOptionPane.showMessageDialog(null, "Card field accepts, exactly, 16 numbers");
+			}
+		});
+		
+		btnNewButton.addActionListener(e -> {
+			
+			if(!userName.isEmpty()) {
+			
+				if(userRList.getSelectedValue() == null) {
+					
+					JOptionPane.showMessageDialog(null, "Select a user's rating first!");
+				}
+				else {
+					
+					int index = userRList.getSelectedIndex();
+					textArea.setText(comment.get(index));
+					if(comment.get(index).equals("")) {
+						
+						JOptionPane.showMessageDialog(null, "User " + userName.get(index) + " didn't comment anything.");
+					}
+				}
+			}
+			else {
+				
+				JOptionPane.showMessageDialog(null, "There are no user ratings for this hotel!");
+			}
+		});
+		
+		addMyRateBtn.addActionListener(e -> {
+			
+			boolean ratePass = false;
+			boolean inThere = false;
+			boolean firstRate = false;
+			int c = 0;
+			int f = 0;
+			String uRateString = (String) yourRateComboBox.getSelectedItem();
+			int uRateInt = Integer.parseInt(uRateString);
+			String uComment = writeCommentArea.getText();
+			boolean NotfoundU = false;
+	
+			if(!h.getRatesAndComms().isEmpty()) {
+				
+				for(RatesAndComms rAC :h.getRatesAndComms()) {
+				
+					if(u.getUserName().equals(rAC.getUserName())) {
+					
+						int dialogButton = JOptionPane.YES_NO_OPTION;
+						int dialogResult = JOptionPane.showConfirmDialog(this, "You already had a rate. Do you want to change it with the new one?", "Title on Box", dialogButton);
+					
+						inThere = true;
+						f = c;
+						if(dialogResult == 0) {
+						
+							ratePass = true;
+							break;
+						}
+						else {
+							
+							ratePass = false;
+						}	
+					}
+					else {
+					
+						ratePass = true;
+						inThere = false;
+					}
+					c++;
+				}
+			}
+			else {
+					
+				ratePass = true;
+				firstRate = true;
+			}
+			
+			if(ratePass) {
+				
+				h.WriteRatingAndComment(h, u, uRateInt, uComment);
+				String newAddToUsersRates = "-  " + u.getUserName() + "  |  " + uRateString + "/5";
+				
+				if(inThere) {
+						
+					ratesList.set(f, newAddToUsersRates);
+				}
+				else {
+					
+					if(firstRate) {
+						
+						ratesList.clear();
+						userRList.setSelectionModel(new DefaultListSelectionModel());
+						ratesList.addElement(newAddToUsersRates);
+					}
+					else {
+						
+						ratesList.addElement(newAddToUsersRates);
+					}
+				}
+				userName.add(u.getUserName());
+				comment.add(uComment);
+			}
+			
+			h.ReadTheRatingsFromTxtFile();
+		});
 		
 		xBtn.addActionListener(e -> {
 			
@@ -453,4 +679,28 @@ public class ChosenHotelScreenGUI extends JFrame {
 			setState(JFrame.ICONIFIED);
 		});
 	}
+	
+	private static class NoSelectionModel extends DefaultListSelectionModel {
+
+		   @Override
+		   public void setAnchorSelectionIndex(final int anchorIndex) {
+			   
+		   }
+
+		   @Override
+		   public void setLeadAnchorNotificationEnabled(final boolean flag) {
+			   
+		   }
+
+		   @Override
+		   public void setLeadSelectionIndex(final int leadIndex) {
+			   
+		   }
+
+		   @Override
+		   public void setSelectionInterval(final int index0, final int index1) { 
+			   
+			   super.setSelectionInterval(-1, -1);
+		   }
+		 }
 }

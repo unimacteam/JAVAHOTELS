@@ -84,8 +84,6 @@ public class Hotel {
 
 		return roomsSize.get(i-1);
 	}
-
-	
 	
 	public ArrayList<Integer> getReservedRoomsPersonSize() {
 		return resRoomsSize;
@@ -185,9 +183,11 @@ public class Hotel {
 		boolean c = false;
 		
 		if(extras.get(3).equals("Y")) {
+			
 			c = true;
 		}
 		else if(extras.get(3).equals("N")) {
+		
 			c = false;
 		}
 		
@@ -262,8 +262,6 @@ public class Hotel {
 	
 	public void UserReservedAtThisHotel(User u, Hotel h, int numOfPersons) {
 		
-		System.out.println("PP: " + getAllRoomsFor(3) + " !! " + resRoomsFor3);
-		
 		if(numOfPersons == 1) {
 			
 			if(resRoomsFor1 < getAllRoomsFor(1)) {
@@ -296,8 +294,6 @@ public class Hotel {
 				usersInThisHotel.put(numOfPersons, u);
 			}
 		}
-		
-		System.out.println("GG: " + getAllRoomsFor(3) + " !! " + resRoomsFor3);
 		
 		ReloadDataInHotelFile(u, h);
 	}
@@ -375,10 +371,6 @@ public class Hotel {
 				e.printStackTrace();
 			}
 		}
-		else {
-			
-			System.out.println("EXISTS1");
-		}
 		
 		//CREATION OF TXT FILE FOR THE DETAILS
 		String txtTwoName = "FilesServer\\HotelsFiles\\" + getName() + "_Details.txt";
@@ -399,10 +391,6 @@ public class Hotel {
 					
 				e.printStackTrace();
 			}
-		}
-		else {
-					
-			System.out.println("EXISTS2");
 		}
 	}
 	
@@ -445,7 +433,7 @@ public class Hotel {
 			}
 			else {
 				
-				System.out.println("Already user " + u.getUserName() + " has already made a rate and a comment");
+				System.out.println("User " + u.getUserName() + " has already made a rate and a comment");
 				BufferedWriter bw2 = new BufferedWriter(new FileWriter(fileHotel, false));
 				
 				int c = 0;
@@ -466,6 +454,8 @@ public class Hotel {
 			}
 
 			readerHRC.close();
+			
+			ReadTheRatingsFromTxtFile();
 		}
 		catch(IOException e) {
 			
@@ -476,7 +466,8 @@ public class Hotel {
 	public void ReadTheRatingsFromTxtFile() {
 		
 		String fileHotelsRC = "FilesServer/HotelsFiles/" + getName() + "_RatesAndComms.txt";
-
+		ratingsAndComms.clear();
+		
 		try { 
 
 			FileReader frHRC = new FileReader(fileHotelsRC);
@@ -523,9 +514,12 @@ public class Hotel {
 		
 		RatesAndComms rAc = new RatesAndComms(userName, rating, comment);
 		
-		System.out.println(comment);
-		
 		ratingsAndComms.add(rAc);
+	}
+	
+	public ArrayList<RatesAndComms> getRatesAndComms() {
+		
+		return ratingsAndComms;
 	}
 	
 	public void ReadDataFromDetailsTxt() {
@@ -569,8 +563,6 @@ public class Hotel {
 					c++;
 				}
 			}
-			
-			System.out.println("Det: " + details);
 			
 			readerHD.close();
 		}

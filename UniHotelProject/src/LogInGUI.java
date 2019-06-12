@@ -113,7 +113,7 @@ public class LogInGUI extends JFrame {
 		btnNewButton_1.setForeground(new Color(119, 136, 153));
 		btnNewButton_1.setBounds(68, 300, 200, 20);
 		contentPane.add(btnNewButton_1);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("Log-in");
 		lblNewLabel_1.setForeground(new Color(119, 136, 153));
 		lblNewLabel_1.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 24));

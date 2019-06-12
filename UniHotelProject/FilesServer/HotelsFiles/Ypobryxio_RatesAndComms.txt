@@ -1,1 +1,2 @@
   User    |    Rating    |      Comment      |
+  Zeles  |  4  |  $I love this Hotel$  |

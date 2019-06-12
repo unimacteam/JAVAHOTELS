@@ -722,6 +722,7 @@ public class ChosenHotelScreenGUI extends JFrame {
 				if(inThere) {
 						
 					ratesList.set(f, newAddToUsersRates);
+					comment.set(f, uComment);
 				}
 				else {
 					
@@ -736,6 +737,7 @@ public class ChosenHotelScreenGUI extends JFrame {
 						ratesList.addElement(newAddToUsersRates);
 					}
 				}
+				textArea.setText(uComment);
 				userName.add(u.getUserName());
 				comment.add(uComment);
 			}

@@ -1,1 +1,2 @@
   CustomerUserName   |    CustomerFullName    |    Email    |    RoomSize    |    FinalPrice    |
+  Zeles  |  Papadopoulos Alexandros  |  dai22022@uom.edu.gr  |  2  |  240.0  |

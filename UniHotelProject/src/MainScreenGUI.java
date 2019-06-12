@@ -143,10 +143,10 @@ public class MainScreenGUI extends JFrame {
 		lblFilters.setBounds(103, 11, 139, 14);
 		filterPanel.add(lblFilters);
 			
-		JLabel lblNewLabel = new JLabel("Price per night");
+		JLabel lblNewLabel = new JLabel("Price per night / person");
 		lblNewLabel.setForeground(new Color(176, 196, 222));
 		lblNewLabel.setFont(new Font("Times New Roman", Font.PLAIN, 13));
-		lblNewLabel.setBounds(19, 46, 79, 14);
+		lblNewLabel.setBounds(19, 46, 125, 14);
 		filterPanel.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("Hotel stars");
@@ -377,7 +377,7 @@ public class MainScreenGUI extends JFrame {
 		rsvScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		rsvScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		
-		detailsButton = new JButton("Details of your checkouts \u2193");
+		detailsButton = new JButton("Your checkouts \u2193");
 		detailsButton.setForeground(new Color(245, 245, 245));;
 		detailsButton.setBackground(new Color(119, 136, 153));
 		detailsButton.setBorder(null);
@@ -416,18 +416,16 @@ public class MainScreenGUI extends JFrame {
 					.addContainerGap(539, Short.MAX_VALUE)
 					.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE))
 				.addGroup(gl_listPanel.createSequentialGroup()
-					.addGap(96)
+					.addGap(15)
 					.addGroup(gl_listPanel.createParallelGroup(Alignment.TRAILING, false)
 						.addComponent(btnEnter, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(lblNewLabel_5, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(listScroller, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
-					.addGroup(gl_listPanel.createParallelGroup(Alignment.LEADING, false)
-						.addGroup(Alignment.TRAILING, gl_listPanel.createSequentialGroup()
-							.addGap(18)
-							.addGap(18)
+					.addGroup(gl_listPanel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_listPanel.createSequentialGroup()
 							.addGroup(gl_listPanel.createParallelGroup(Alignment.TRAILING, false)
 								.addGroup(gl_listPanel.createSequentialGroup()
-									.addComponent(rsvScroller, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+									.addComponent(rsvScroller, GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
 									.addPreferredGap(ComponentPlacement.RELATED))
 								.addComponent(detailsButton, 0, 0, Short.MAX_VALUE)
 								.addComponent(lblNewLabel_6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -457,15 +455,10 @@ public class MainScreenGUI extends JFrame {
 							.addGap(4)
 							.addComponent(btnEnter, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_listPanel.createSequentialGroup()
-							.addGroup(gl_listPanel.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_listPanel.createSequentialGroup()
-									.addComponent(rsvScroller, GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(detailsButton)
-									.addGap(22))
-								.addGroup(gl_listPanel.createSequentialGroup()
-									.addGap(91)
-									.addPreferredGap(ComponentPlacement.RELATED)))
+							.addComponent(rsvScroller, GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(detailsButton)
+							.addGap(22)
 							.addGroup(gl_listPanel.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblRoomSize)
 								.addComponent(lblPrice))
@@ -487,7 +480,6 @@ public class MainScreenGUI extends JFrame {
 			
 			for(CustomersList cL :h.getCustomersList()) {
 				
-				System.out.println(h.getName() + " " + cL.getUsername());
 				if(cL.getUsername().equals(u.getUserName())) {
 					
 					rsvModel.addElement(h.getName());
@@ -592,7 +584,8 @@ public class MainScreenGUI extends JFrame {
 				
 				for(Hotel h: hotels)
 					//int myInt = myBoolean ? 1 : 0;
-				{	int tempExtras[] = {0,0,0,0,0};
+				{	
+					int tempExtras[] = {0,0,0,0,0};
 					tempExtras[0] = h.hasAGym() ? 1 : 0;
 					tempExtras[1] = h.hasAPool() ? 1 : 0;
 					tempExtras[2] = h.hasARestaurant() ? 1 : 0;
@@ -612,8 +605,7 @@ public class MainScreenGUI extends JFrame {
 						}
 						
 						if(hasAllExtras) {
-							
-							System.out.println(h.getName());
+	
 							applicableHotels.add(h);
 						}
 					}
@@ -637,7 +629,6 @@ public class MainScreenGUI extends JFrame {
 					this.setVisible(false);
 					this.dispose();
 					ChosenHotelScreenGUI chosenHScrGUI = new ChosenHotelScreenGUI();
-					System.out.println(h.getName());
 					chosenHScrGUI.run(hotels, users, h, u);
 					break;
 				}
@@ -673,7 +664,7 @@ public class MainScreenGUI extends JFrame {
 				JSlider source = (JSlider)e.getSource();
 			    if(!source.getValueIsAdjusting()) {
 			    	
-			    	pricePerNight = (int)source.getValue();
+			    	pricePerNight = (int)source.getValue() ;
 			    	PriceF.setText(Integer.toString((int) pricePerNight));
 			    }
 			}
@@ -702,8 +693,11 @@ public class MainScreenGUI extends JFrame {
 				for(Hotel h: hotels) {
 					
 					if(h.getPriceFor(numberOfGuests) > maxp) {
-						
+							
 						maxp = (int) h.getPriceFor(numberOfGuests);
+						
+						//System.out.println(maxp + " " + numberOfGuests + " " + h.getPriceFor(numberOfGuests));
+						
 					}
 				}
 				maxp++;

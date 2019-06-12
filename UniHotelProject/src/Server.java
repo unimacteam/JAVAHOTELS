@@ -66,8 +66,6 @@ public class Server {
 
 			e.printStackTrace();
 		}
-	
-		Check();
 		
 		//CONNECT FILES TO PROGRAMM, SO IT CAN WRITE DATA TO THEM
 		//new SignUpForm(users, activeUsers);
@@ -225,7 +223,6 @@ public class Server {
 		line = line.replaceFirst(email + "\\|", "");
 		
 		status = line.substring(0, line.indexOf("|"));
-		System.out.println(status);
 		line = line.replaceFirst(status + "\\|", "");
 
 		User u = new User(userName, password, email, name, lastName, status);
@@ -240,16 +237,5 @@ public class Server {
 	public ArrayList<User> GetUsersList() {
 
 		return users;
-	}
-	
-	//CLASS ONLY FOR CHECKS OF OTHER FUNCTIONS
-	public void Check() {
-		
-		Hotel h = hotels.get(0);
-			
-		 	h.UserReservedAtThisHotel(users.get(0), h, 3);
-			System.out.println("Free Rooms " + h.GetFreeRoomsFor(4) + " | " + h.getName());
-			h.WriteRatingAndComment(h, users.get(0), 3, "J J");
-			System.out.println("Rates: " + h.GetAverageRating());
 	}
 }

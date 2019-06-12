@@ -1,7 +1,5 @@
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -48,6 +46,7 @@ public class ChosenHotelScreenGUI extends JFrame {
 	private ArrayList<String> userName = new ArrayList<>();
 	private ArrayList<String> comment = new ArrayList<>();
 	private DefaultListModel<String> ratesList = new DefaultListModel<>();
+	private Vector freeRooms = new Vector();
 	
 	public ChosenHotelScreenGUI() {
 		
@@ -271,8 +270,6 @@ public class ChosenHotelScreenGUI extends JFrame {
 		lblPeople.setBounds(10, 37, 48, 14);
 		rsvPanel.add(lblPeople);
 		
-		Vector freeRooms = new Vector();
-		
 		if(h.GetFreeRoomsFor(1) > 0) {
 			
 			freeRooms.add(1);
@@ -440,7 +437,7 @@ public class ChosenHotelScreenGUI extends JFrame {
 		if(ratesList.get(0).equals("   THIS HOTEL HAS NO")) {
 			
 			userRList.setSelectionModel(new NoSelectionModel());
-			userRList.setSelectionMode(new NoSelectionModel().SINGLE_INTERVAL_SELECTION);;
+			userRList.setSelectionMode(new NoSelectionModel().SINGLE_INTERVAL_SELECTION);
 		}
 		
 		scroller = new JScrollPane(userRList);
@@ -541,31 +538,108 @@ public class ChosenHotelScreenGUI extends JFrame {
 			MainScreenGUI mainScreenGUI = new MainScreenGUI();
 			mainScreenGUI.run(hotels, users, u);
 		});
-	
-		textArea.addKeyListener(new KeyAdapter() {
-	      
-			@Override
-			public void keyPressed(KeyEvent e) {
-
-				int key = e.getKeyCode();
-
-	            /* Restrict input to only integers */
-	            if (key < 96 && key > 105) e.setKeyChar(' ');
-	        };
-	    });
 		
 		checkoutBtn.addActionListener(e -> {
 		
 			int people = (Integer) comboBox.getSelectedItem();
 			String card = cardField.getText();
 			
-			if(card.length() > 15 && card.length() < 17) {
+			if(card.matches("[0-9]+")) {
 				
-				System.out.println("JJ");
+				if(card.length() > 15 && card.length() < 17) {
+					
+					double finalPrice = people * h.getPriceFor(people);
+					
+					if(h.GetFreeRoomsFor(people) != 0) {
+						
+						int dialogButton1 = JOptionPane.YES_NO_OPTION;
+						int dialogResult1 = 0;
+						
+						if(people == 1) {
+							
+							dialogResult1 = JOptionPane.showConfirmDialog(this, "The final price is " + finalPrice + "$.Still want to make the reservation?", "Travellers_Message", dialogButton1);
+						}
+						else {
+							
+							dialogResult1 = JOptionPane.showConfirmDialog(this, "The final price is " + finalPrice + "$ (" + h.getPriceFor(people) + "$/person).Still want to make the reservation?", "Travellers_Message", dialogButton1);
+						}
+					 
+						if(dialogResult1 == 0) {
+							
+							h.WriteToCustomersListTXTFile(h, u, people, finalPrice);
+							h.UserReservedAtThisHotel(u, h, people);
+						
+							freeRooms.clear();
+						
+							if(h.GetFreeRoomsFor(1) > 0) {
+							
+								freeRooms.add(1);
+							}
+						
+							if(h.GetFreeRoomsFor(2) > 0) {
+							
+								freeRooms.add(2);
+							}
+
+							if(h.GetFreeRoomsFor(3) > 0) {
+					
+								freeRooms.add(3);
+							}
+
+							if(h.GetFreeRoomsFor(4) > 0) {
+					
+								freeRooms.add(4);
+							}
+						
+							System.out.println("Done");
+						
+							int dialogButton2 = JOptionPane.YES_NO_OPTION;
+							int dialogResult2 = JOptionPane.showConfirmDialog(this, "Do you want to continue with this hotel?", "Travellers_Message", dialogButton2);
+						
+							if(dialogResult2 == 0) {
+								
+								System.out.println("stay");
+							}
+							else {
+							
+								this.setVisible(false);
+								this.dispose();
+								MainScreenGUI mainScreenGUI = new MainScreenGUI();
+								mainScreenGUI.run(hotels, users, u);
+							}
+						}
+					}
+					else {
+						
+						if(people == 1) {
+							
+							JOptionPane.showMessageDialog(this, "The " + people + " person size rooms, are full in this hotel. This will get you back to MainScreen and if you want to continue, enter again on " + h.getName() + ".",  "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
+						}
+						else {
+							
+							JOptionPane.showMessageDialog(this, "The " + people + " people size rooms, are full in this hotel. This will get you back to MainScreen and if you want to continue, enter again on " + h.getName() + ".", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
+						}
+						this.setVisible(false);
+						this.dispose();
+						MainScreenGUI mainScreenGUI = new MainScreenGUI();
+						mainScreenGUI.run(hotels, users, u);
+					}
+				}
+				else {
+
+					JOptionPane.showMessageDialog(this, "Card field accepts, exactly, 16 numbers", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
 			else {
 				
-				JOptionPane.showMessageDialog(null, "Card field accepts, exactly, 16 numbers");
+				if(card.length() > 15 && card.length() < 17) {
+					
+					JOptionPane.showMessageDialog(this, "Card field can't contain anything, except 16 numbers", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
+				}
+				else {
+
+					JOptionPane.showMessageDialog(this, "Card field accepts, exactly, 16 numbers", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
 		});
 		
@@ -575,7 +649,7 @@ public class ChosenHotelScreenGUI extends JFrame {
 			
 				if(userRList.getSelectedValue() == null) {
 					
-					JOptionPane.showMessageDialog(null, "Select a user's rating first!");
+					JOptionPane.showMessageDialog(this, "Select a user's rating first!", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
 				}
 				else {
 					
@@ -583,13 +657,13 @@ public class ChosenHotelScreenGUI extends JFrame {
 					textArea.setText(comment.get(index));
 					if(comment.get(index).equals("")) {
 						
-						JOptionPane.showMessageDialog(null, "User " + userName.get(index) + " didn't comment anything.");
+						JOptionPane.showMessageDialog(this, "User " + userName.get(index) + " didn't comment anything.", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
 					}
 				}
 			}
 			else {
 				
-				JOptionPane.showMessageDialog(null, "There are no user ratings for this hotel!");
+				JOptionPane.showMessageDialog(this, "There are no user ratings for this hotel!", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		
@@ -612,7 +686,7 @@ public class ChosenHotelScreenGUI extends JFrame {
 					if(u.getUserName().equals(rAC.getUserName())) {
 					
 						int dialogButton = JOptionPane.YES_NO_OPTION;
-						int dialogResult = JOptionPane.showConfirmDialog(this, "You already had a rate. Do you want to change it with the new one?", "Title on Box", dialogButton);
+						int dialogResult = JOptionPane.showConfirmDialog(this, "You already had a rate. Do you want to change it with the new one?", "Travellers_Message", dialogButton);
 					
 						inThere = true;
 						f = c;
@@ -702,5 +776,5 @@ public class ChosenHotelScreenGUI extends JFrame {
 			   
 			   super.setSelectionInterval(-1, -1);
 		   }
-		 }
+	}
 }

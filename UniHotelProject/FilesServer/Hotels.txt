@@ -1,4 +1,7 @@
   Name      |    Location    |       Street       |   Price(1_2_3_4)   |   RoomsSize(1_2_3_4)   |  ReservedRoomsSize(1_2_3_4)  |   Stars   |    Pool    |    Gym    |    Restaurant    |    Breakfast    |     Lunch    |
-  Afroditi  |  Athens  |  Kassandrou12  |  30.0, 45.0, 65.0, 80.0  |  10 , 20 , 15 , 15  |  $0 , 0 , 15, 1$  |  2  |  N  |  N  |  N  |  N  |  N  |  
-  Mediterranean  |  Ksanthi  |  Kiki 8  |  80.0, 120, 150, 180  |  8 , 20 , 12 , 13  |  $0 , 0 , 1, 0$  |  4  |  Y  |  Y  |  Y  |  Y  |  Y  |
-  Kyrki  |  Volos  |  Dhmou 9  |  45.0, 60, 75, 90 |  9 , 11 , 10 , 11  |  $0 , 0 , 1, 0$  |  3  |  N  |  N  |  Y  |  Y  |  Y  |
+  Afroditi  |  Athens  |  Kassandrou12  |  30.0, 45.0, 65.0, 80.0  |  10 , 20 , 15 , 15  |  $0 , 0 , 8, 0$  |  2  |  N  |  N  |  N  |  N  |  N  |  
+  Mediterranean  |  Ksanthi  |  Kiki8  |  80.0, 120.0, 150.0, 180.0  |  8 , 20 , 12 , 13  |  $0 , 0 , 0, 0$  |  4  |  Y  |  Y  |  Y  |  Y  |  Y  |  
+  Kyrki  |  Volos  |  Dhmou9  |  45.0, 60.0, 75.0, 90.0  |  9 , 11 , 10 , 11  |  $0 , 0 , 0, 0$  |  3  |  N  |  N  |  Y  |  Y  |  Y  |
+  Millenium  |  Patra  |  Iearxias9  |  45.0, 60.0, 75.0, 90.0  |  9 , 11 , 10 , 11  |  $0 , 0 , 0, 0$  |  4  |  N  |  Y  |  Y  |  Y  |  Y  |
+  GoldenBeach  |  Pieria  |  DhmhtriouNika98  |  45.0, 60.0, 75.0, 90.0  |  11 , 13 , 5 , 0  |  $0 , 0 , 0, 0$  |  2  |  N  |  N  |  N  |  N  |  N  |  
+  Ypobryxio  |  Kerkyra  |  Solomontos16  |  70.0, 55.0, 50.0, 50.0  |  5 , 21 , 10 , 10  |  $0 , 0 , 0, 0$  |  3  |  N  |  Y  |  Y  |  Y  |  N  |  

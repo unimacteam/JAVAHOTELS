@@ -21,7 +21,7 @@ public class LogInGUI extends JFrame {
 	private String passCode;
 	
 	private ArrayList<User> users;
-	private User activeUser;
+	private User currentUser;
 	private User userThatSendFromSignUp;
 	
 	//It was created only cause, MainScreenGUI needs both, users and hotels arrays. Server was created in main so i pass the arrayList of hotels, which hotels i found, in main and they are here only for that
@@ -43,11 +43,11 @@ public class LogInGUI extends JFrame {
 	/**
 	 * Launch the application.
 	 */ 
-	public void run(ArrayList<User> users, User activeUser, ArrayList<Hotel> hotels) {
+	public void run(ArrayList<User> users, ArrayList<Hotel> hotels) {
 		
 		try {
 			
-			LogInGUI frame = new LogInGUI(users, activeUser, hotels);
+			LogInGUI frame = new LogInGUI(users, hotels);
 			frame.setVisible(true);
 		}
 		catch (Exception e) {
@@ -59,10 +59,9 @@ public class LogInGUI extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public LogInGUI(ArrayList<User> users, User activeUser, ArrayList<Hotel> hotels) {
+	public LogInGUI(ArrayList<User> users, ArrayList<Hotel> hotels) {
 		
 		this.users = users;
-		this.activeUser = activeUser;
 		this.hotels = hotels;
 		
 		setUndecorated(true);
@@ -148,13 +147,25 @@ public class LogInGUI extends JFrame {
 			passFromField = passwordField.getPassword();
 			passCode = new String(passFromField);
 			
-			if(this.LogIn(users, activeUser)) {
+			if(this.LogIn(users)) {
 				
-				this.setVisible(false);
-				this.dispose();
-				//Hotels array is here only for this part
-				MainScreenGUI mainScreenGUI = new MainScreenGUI();
-				mainScreenGUI.run(hotels, users, activeUser);
+				if(currentUser.getStatus().equals("U")) {
+					
+					this.setVisible(false);
+					this.dispose();
+					//Hotels array is here only for this part
+					JOptionPane.showMessageDialog(this, "Logged in as: " + currentUser.getUserName()+ ".", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
+					MainScreenGUI mainScreenGUI = new MainScreenGUI();
+					mainScreenGUI.run(hotels, users, currentUser);
+				}
+				else {
+					
+					this.setVisible(false);
+					this.dispose();
+					JOptionPane.showMessageDialog(this, "Hello Admin. Logged in as: " + currentUser.getUserName()+ ".", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
+					AdminScreenGUI adminScreenGUI = new AdminScreenGUI();
+					adminScreenGUI.run(hotels, users);
+				}
 			}
 		});
 		
@@ -181,7 +192,7 @@ public class LogInGUI extends JFrame {
 		});
 	}
 		
-	public boolean LogIn(ArrayList<User> users, User currentUser) {	
+	public boolean LogIn(ArrayList<User> users) {	
 			
 		boolean logInSuccessful = false;
 		boolean userFound = false;
@@ -195,17 +206,13 @@ public class LogInGUI extends JFrame {
 				userFound = true;
 					
 				if(passCode.equals(u.getPassCode())) {
-					
-					activeUser = u;
-					
+				
 					passwdFound = true;
-					activeUser=u;
+					currentUser = u;
 					logInSuccessful = true;
-					JOptionPane.showMessageDialog(this, "Logged in as: " + u.getUserName()+ ".");
 					break;
 				}
 			}
-				
 		}
 				
 		if(!logInSuccessful) {
@@ -231,12 +238,12 @@ public class LogInGUI extends JFrame {
 		
 	public void WrongUsernamePopUp() {
 			
-		JOptionPane.showMessageDialog(this, "Username didn't found");
+		JOptionPane.showMessageDialog(this, "Username didn't found", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
 	}
 		
 	public void PasswdDoesntMatchUsernamePopUp() {
 			
-		JOptionPane.showMessageDialog(this, "Wrong password!");
+		JOptionPane.showMessageDialog(this, "Wrong password!", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	public User GetUserThatWantToSignUpFromLogInForm() {

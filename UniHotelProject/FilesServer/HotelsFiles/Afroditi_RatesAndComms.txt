@@ -1,3 +1,2 @@
   User    |    Rating    |      Comment      |
-  GiOne  |  5  |  $LL L$  |
   Zeles  |  3  |  $J J$  |

@@ -26,6 +26,7 @@ public class Hotel {
 	private String details = "";
 	private Map<Integer, User> usersInThisHotel = new HashMap<>();
 	private ArrayList<RatesAndComms> ratingsAndComms = new ArrayList<>();
+	private ArrayList<CustomersList> customersList = new ArrayList<>();
 	
 	public Hotel(String name, String location, String street, ArrayList<Double> price, ArrayList<Integer> roomsSize, ArrayList<Integer> resRoomsSize, int stars, ArrayList<String> extras) {
 		
@@ -39,9 +40,10 @@ public class Hotel {
 		this.extras = extras;
 		
 		GiveDataFromResRoomsArrayToVar();
-		CreateTWOTxtFilesForThisHotel();
+		CreateTHREETxtFilesForThisHotel();
 		ReadTheRatingsFromTxtFile();
 		ReadDataFromDetailsTxt();
+		ReadDataFromCustomersListTXTFile();
 	}
 	
 	public String getName() {
@@ -349,7 +351,7 @@ public class Hotel {
 		}
 	}
 	
-	public void CreateTWOTxtFilesForThisHotel() {
+	public void CreateTHREETxtFilesForThisHotel(){
 		
 		//CREATION OF TXT FILE FOR RATES AND COMMS
 		String txtOneName = "FilesServer\\HotelsFiles\\" + getName() + "_RatesAndComms.txt";
@@ -380,10 +382,31 @@ public class Hotel {
 		if(!checkTwo.exists()) {
 					
 			try {
-					
+				
 				File f = new File(txtTwoName);
 				FileWriter writer = new FileWriter(f);
-				writer.write("  Details    |");
+				writer.write("");
+				
+				writer.close();
+			}	
+			catch(IOException e) {
+			
+				e.printStackTrace();
+			}
+		}
+		
+		////CREATION OF TXT FILE FOR THE LIST OF CUSTOMERS
+		String txtThreeName = "FilesServer\\HotelsFiles\\" + getName() + "_CustomersList.txt";
+			
+		File checkThree = new File(txtThreeName);
+				
+		if(!checkThree.exists()) {
+					
+			try {	
+				
+				File f = new File(txtThreeName);
+				FileWriter writer = new FileWriter(f);
+				writer.write("  CustomerUserName   |    CustomerFullName    |    Email    |    RoomSize    |    FinalPrice    |");
 			
 				writer.close();
 			}
@@ -522,6 +545,24 @@ public class Hotel {
 		return ratingsAndComms;
 	}
 	
+	public void WriteDetailsOfThisHotel(Hotel h, String details) {
+		
+		String fileHotelD = "FilesServer\\HotelsFiles\\" + h.getName() + "_Details.txt";
+		
+		try {
+			
+			BufferedWriter bw1 = new BufferedWriter(new FileWriter(fileHotelD, false));
+			bw1.append(details);
+			bw1.close();
+			
+			ReadDataFromDetailsTxt();
+		}
+		catch(IOException e) {
+
+			e.printStackTrace();
+		}
+	}
+	
 	public void ReadDataFromDetailsTxt() {
 		
 		String fileHotelDetails = "FilesServer/HotelsFiles/" + getName() + "_Details.txt";
@@ -534,41 +575,117 @@ public class Hotel {
 			FileReader frHD = new FileReader(fileHotelDetails);
 			BufferedReader readerHD = new BufferedReader(frHD);
 
-			boolean checkHD = false;
 			String lineHD = readerHD.readLine();
 			while(lineHD != null) {
 
-				if(checkHD) {
-
-					check = 1;
-					detailsArray.add(lineHD);
-				}
+				detailsArray.add(lineHD);
 
 				lineHD = readerHD.readLine();
-				checkHD = true;
 			}
 			
-			if(check == 1) {
-				
-				for(String d :detailsArray) {
+			for(String d :detailsArray) {
 					
-					if(c == 0) {
+				if(c == 0) {
 					
-						details = details + d;
-					}
-					else {
-						
-						details = details + System.lineSeparator() + d;
-					}
-					c++;
+					details = details + d;
 				}
+				else {
+						
+					details = details + System.lineSeparator() + d;
+				}
+				c++;
 			}
-			
 			readerHD.close();
 		}
 		catch(IOException e) {
 
 			e.printStackTrace();
 		}
+	}
+	
+	public ArrayList<CustomersList> getCustomersList() {
+		
+		return customersList;
+	}
+	
+	public void WriteToCustomersListTXTFile(Hotel h, User u, int roomSize, double price) {
+		
+		String fileCustomerList = "FilesServer\\HotelsFiles\\" + h.getName() + "_CustomersList.txt";
+		
+		try {
+	
+			BufferedWriter bw = new BufferedWriter(new FileWriter(fileCustomerList, true));
+			bw.append(System.lineSeparator() + "  " + u.getUserName() + "  |  " + u.getSurname() + " " + u.getName() + "  |  " + u.getEmail() + "  |  " + roomSize + "  |  " + price + "  |");
+			bw.close();
+			
+			ReadDataFromCustomersListTXTFile();
+		}
+		catch(IOException e) {
+			
+			e.printStackTrace();
+		}	
+	}
+	
+	public void ReadDataFromCustomersListTXTFile() {
+		
+		String fileCL = "FilesServer/HotelsFiles/" + getName() + "_CustomersList.txt";
+		customersList.clear();
+		
+		try { 
+
+			FileReader frCL = new FileReader(fileCL);
+			BufferedReader readerCL = new BufferedReader(frCL);
+
+			boolean checkCL = false;
+			String lineCL = readerCL.readLine();
+			while(lineCL != null) {
+
+				if(checkCL) {
+
+					CreateCL(lineCL);
+				}
+
+				lineCL = readerCL.readLine();
+				checkCL = true;
+			}
+
+			readerCL.close();
+		}
+		catch(IOException e) {
+
+			e.printStackTrace();
+		}
+	}
+	
+	public void CreateCL(String line) {
+		
+		String username = "";
+		String fullName = "";
+		String email = "";
+		int roomSize = 0;
+		double price = 0;
+		
+		line = line.replaceAll("\\s+", "");
+		
+		username = line.substring(0, line.indexOf("|"));
+		line = line.replaceFirst(username + "\\|", "");
+		
+		fullName = line.substring(0, line.indexOf("|"));
+		line = line.replaceFirst(fullName + "\\|", "");
+		
+		email = line.substring(0, line.indexOf("|"));
+		line = line.replaceFirst(email + "\\|", "");
+		
+		String roomSizeString = line.substring(0, line.indexOf("|"));
+		roomSize = Integer.parseInt(roomSizeString);
+		line = line.replaceFirst(roomSizeString + "\\|", "");
+		
+		String priceString = line.substring(0, line.indexOf("|"));
+		price = Double.parseDouble(priceString);
+		line = line.replaceFirst(priceString + "\\|", "");
+		
+		CustomersList cL = new CustomersList(username, fullName, email, roomSize, price);
+		
+		customersList.add(cL);
 	}
 }

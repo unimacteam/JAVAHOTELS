@@ -1,0 +1,1 @@
+  CustomerUserName   |    CustomerFullName    |    Email    |    RoomSize    |    FinalPrice    |

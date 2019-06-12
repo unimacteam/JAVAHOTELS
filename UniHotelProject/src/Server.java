@@ -88,13 +88,13 @@ public class Server {
 		line = line.replaceAll("\\s+", "");
 			
 		name = line.substring(0, line.indexOf("|"));
-		line = line.replaceAll(name + "\\|", "");
+		line = line.replaceFirst(name + "\\|", "");
 		
 		location = line.substring(0, line.indexOf("|"));
-		line = line.replaceAll(location + "\\|", "");
+		line = line.replaceFirst(location + "\\|", "");
 			
 		street = line.substring(0, line.indexOf("|"));
-		line = line.replaceAll(street + "\\|", "");
+		line = line.replaceFirst(street + "\\|", "");
 			
 		if(street.contains("_")) {
 			
@@ -109,13 +109,13 @@ public class Server {
 				
 				price.add(Double.parseDouble(line.substring(0, line.indexOf(","))));
 				String pricS = line.substring(0, line.indexOf(","));
-				line = line.replaceAll(pricS + ",", "");
+				line = line.replaceFirst(pricS + ",", "");
 			}
 			else {
 				
 				price.add(Double.parseDouble(line.substring(0, line.indexOf("|"))));
 				String pricS = line.substring(0, line.indexOf("|"));
-				line = line.replaceAll(pricS + "\\|", "");
+				line = line.replaceFirst(pricS + "\\|", "");
 			}
 		}
 		
@@ -171,7 +171,7 @@ public class Server {
 
 		stars = Integer.parseInt(line.substring(0, line.indexOf("|")));
 		String starsString = line.substring(0, line.indexOf("|"));
-		line = line.replaceAll(starsString + "\\|", "");
+		line = line.replaceFirst(starsString + "\\|", "");
 		
 		String pool = line.substring(0, line.indexOf("|"));
 		extra.add(pool);
@@ -205,25 +205,30 @@ public class Server {
 		String name = "";
 		String lastName = "";
 		String email = "";
+		String status = "";
 
 		line = line.replaceAll("\\s+", "");
 
 		userName = line.substring(0, line.indexOf("|"));
-		line = line.replaceAll(userName + "\\|", "");
+		line = line.replaceFirst(userName + "\\|", "");
 
 		password = line.substring(0, line.indexOf("|"));
-		line = line.replaceAll(password + "\\|", "");
+		line = line.replaceFirst(password + "\\|", "");
 
 		name = line.substring(0, line.indexOf("|"));
-		line = line.replaceAll(name + "\\|", "");
+		line = line.replaceFirst(name + "\\|", "");
 
 		lastName = line.substring(0, line.indexOf("|"));
-		line = line.replaceAll(lastName + "\\|", "");
+		line = line.replaceFirst(lastName + "\\|", "");
 
 		email = line.substring(0, line.indexOf("|"));
-		line = line.replaceAll(email + "\\|", "");
+		line = line.replaceFirst(email + "\\|", "");
+		
+		status = line.substring(0, line.indexOf("|"));
+		System.out.println(status);
+		line = line.replaceFirst(status + "\\|", "");
 
-		User u = new User(userName, password, email, name, lastName);
+		User u = new User(userName, password, email, name, lastName, status);
 		users.add(u);
 	}
 

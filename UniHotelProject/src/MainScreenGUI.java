@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
@@ -29,7 +30,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-
+//ΤΟ ΚΟΜΜΑΤΙ ΜΕ ΤΙΣ ΗΜΕΡΟΜΗΝΙΕΣ ΔΕΝ ΤΟ ΠΡΟΛΑΒΑΙΝΑΜΕ ΓΙ ΑΥΤΟ ΤΟ ΑΦΗΣΑΜΕ ΕΚΤΟΣ. ΩΣΤΟΣΟ ΔΟΥΛΕΨΑΜΕ ΣΚΛΗΡΑ ΓΙΑ ΤΑ ΥΠΟΛΟΙΠΑ
 public class MainScreenGUI extends JFrame {
 
 	private JPanel contentPane;
@@ -50,6 +51,10 @@ public class MainScreenGUI extends JFrame {
 	private JRadioButton rdbtnBreakfast;
 	private JRadioButton rdbtnRestaurant;
 	private JRadioButton rdbtnLunch;
+	private JTextField rsizeField;
+	private JTextField priceField;
+	private JButton detailsButton;
+	private JList reservationsList;
 	private ArrayList<Hotel> hotels = new ArrayList();
 	private ArrayList<User> users = new ArrayList();
 	private User u;
@@ -68,6 +73,9 @@ public class MainScreenGUI extends JFrame {
 	private int minp;
 	private int initp;
 	private int stars;
+	private DefaultListModel rsvModel;
+	private ArrayList<Integer> roomSizeOfResrv;
+	private ArrayList<Double> pricesOfResrv;
 	
 	public MainScreenGUI() {
 		
@@ -99,7 +107,7 @@ public class MainScreenGUI extends JFrame {
 		setUndecorated(true);
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 788, 575);
+		setBounds(100, 100, 988, 575);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(240, 248, 255));
 		contentPane.setBorder(new LineBorder(new Color(176, 196, 222), 2));
@@ -134,8 +142,7 @@ public class MainScreenGUI extends JFrame {
 		lblFilters.setHorizontalAlignment(SwingConstants.CENTER);
 		lblFilters.setBounds(103, 11, 139, 14);
 		filterPanel.add(lblFilters);
-		
-		
+			
 		JLabel lblNewLabel = new JLabel("Price per night");
 		lblNewLabel.setForeground(new Color(176, 196, 222));
 		lblNewLabel.setFont(new Font("Times New Roman", Font.PLAIN, 13));
@@ -160,7 +167,6 @@ public class MainScreenGUI extends JFrame {
 		lblNewLabel_3.setBounds(19, 223, 79, 14);
 		filterPanel.add(lblNewLabel_3);
 
-		
 		JLabel lblNewLabel_4 = new JLabel("Services");
 		lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_4.setForeground(new Color(176, 196, 222));
@@ -175,18 +181,23 @@ public class MainScreenGUI extends JFrame {
 		filterPanel.add(lblLocation);
 		
 		//Sliders
-
-
-		maxp  =-1;
+		maxp = -1;
 		
-		for (Hotel h: hotels)
-		{	if(h.getPriceFor(numberOfGuests)>maxp)
-				maxp=(int) h.getPriceFor(numberOfGuests) + 1;
+		for (Hotel h: hotels) {
+			
+			if(h.getPriceFor(numberOfGuests) > maxp) {
+				
+				maxp = (int) h.getPriceFor(numberOfGuests) + 1;
+			}
 		}
+		
         minp = maxp;
-        for (Hotel h: hotels)
-        {    if(h.getPriceFor(numberOfGuests)<minp)
-            minp=(int) h.getPriceFor(numberOfGuests);
+        for(Hotel h: hotels) {
+        	
+        	if(h.getPriceFor(numberOfGuests) < minp) {
+            
+        		minp = (int) h.getPriceFor(numberOfGuests);
+        	}
         }
         initp=(minp+maxp)/2;
         pricePerNight= initp;
@@ -201,8 +212,6 @@ public class MainScreenGUI extends JFrame {
 		priceSlider.setPaintTicks(true);
 		priceSlider.setPaintLabels(true);
 		filterPanel.add(priceSlider);
-		
-		
 		
 		ratingSlider = new JSlider(JSlider.HORIZONTAL, 1, 5, 3);
 		ratingSlider.setForeground(new Color(176, 196, 222));
@@ -222,8 +231,7 @@ public class MainScreenGUI extends JFrame {
 		separator.setOrientation(SwingConstants.VERTICAL);
 		separator.setBounds(553, 72, 2, -69);
 		filterPanel.add(separator);
-		
-		
+			
 		//Radio buttons
 		rdbtnGym = new JRadioButton("Gym");
 		rdbtnGym.setForeground(new Color(176, 196, 222));
@@ -252,8 +260,7 @@ public class MainScreenGUI extends JFrame {
 		rdbtnLunch.setFont(new Font("Times New Roman", Font.PLAIN, 13));
 		rdbtnLunch.setBounds(132, 424, 79, 23);
 		filterPanel.add(rdbtnLunch);
-		
-		
+			
 		rdbtnPool = new JRadioButton("Pool");
 		rdbtnPool.setForeground(new Color(176, 196, 222));
 		rdbtnPool.setBackground(new Color(119, 136, 153));
@@ -269,7 +276,6 @@ public class MainScreenGUI extends JFrame {
 		btnApply.setFont(new Font("Times New Roman", Font.PLAIN, 13));
 		btnApply.setBounds(132, 484, 100, 23);
 		filterPanel.add(btnApply);
-
 		
 		//Combo boxes
 		String [] hotelStars = {"1 star", "2 star", "3 star", "4 star", "5 star"};
@@ -281,7 +287,6 @@ public class MainScreenGUI extends JFrame {
 		starsBox.setBounds(19, 158, 125, 22);
 		filterPanel.add(starsBox);
 		
-		
 		String [] roomSizes = {"single room", "double room", "triple room", "quadruple room"};
 		roomSizeBox = new JComboBox(roomSizes);
 		roomSizeBox.setForeground(new Color(176, 196, 222));
@@ -289,12 +294,13 @@ public class MainScreenGUI extends JFrame {
 		roomSizeBox.setBounds(19, 248, 125, 22);
 		filterPanel.add(roomSizeBox);
 
-		
 		ArrayList<String> locations = new ArrayList<String>();
-		for (Hotel h: hotels)
-		{
-			if(!locations.contains(h.getLocation()))
+		for(Hotel h: hotels) {
+			
+			if(!locations.contains(h.getLocation())) {
+			
 				locations.add(h.getLocation());
+			}
 		}
 		
 		locationBox = new JComboBox(locations.toArray());
@@ -302,17 +308,14 @@ public class MainScreenGUI extends JFrame {
 		locationBox.setFont(new Font("Times New Roman", Font.PLAIN, 13));
 		locationBox.setBounds(183, 248, 125, 22);
 		filterPanel.add(locationBox);
-
 		
 		//JText Fields
-		
 		PriceF = new JTextField();
 		PriceF.setBounds(280, 71, 50, 22);
 		PriceF.setEditable(false);
 		PriceF.setForeground(new Color(176, 196, 222));
 		PriceF.setText(Integer.toString(initp));
 		filterPanel.add(PriceF);
-
 	}
 	
 	public void CreateHotelList() {
@@ -326,6 +329,7 @@ public class MainScreenGUI extends JFrame {
 		spr.putConstraint(SpringLayout.WEST, listPanel, 0, SpringLayout.EAST, filterPanel);
 		spr.putConstraint(SpringLayout.EAST, listPanel, 0, SpringLayout.EAST, contentPane);
 		contentPane.add(listPanel);
+		
 		listModel = new DefaultListModel();
 		
 		for(Hotel h: hotels) {
@@ -357,8 +361,8 @@ public class MainScreenGUI extends JFrame {
 		
 		//Buttons
 		btnNewButton_1 = new JButton("Log out");
-		btnNewButton_1.setForeground(new Color(128, 128, 128));
-		btnNewButton_1.setBackground(new Color(245, 245, 245));
+		btnNewButton_1.setForeground(new Color(119, 136, 153));
+		btnNewButton_1.setBackground(new Color(176, 196, 222));
 		btnNewButton_1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		btnNewButton_1.setBorder(null);
 		
@@ -367,51 +371,162 @@ public class MainScreenGUI extends JFrame {
 		btnEnter.setBackground(new Color(119, 136, 153));
 		btnEnter.setFont(new Font("Times New Roman", Font.PLAIN, 17));
 		btnEnter.setForeground(new Color(245, 245, 245));
+		
+		JScrollPane rsvScroller = new JScrollPane();
+		rsvScroller.setBorder(new LineBorder(new Color(176, 196, 222)));
+		rsvScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		rsvScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		
+		detailsButton = new JButton("Details of your checkouts \u2193");
+		detailsButton.setForeground(new Color(245, 245, 245));;
+		detailsButton.setBackground(new Color(119, 136, 153));
+		detailsButton.setBorder(null);
+		detailsButton.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		
+		JLabel lblNewLabel_6 = new JLabel("My Reservations");
+		lblNewLabel_6.setForeground(new Color(119, 136, 153));
+		lblNewLabel_6.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		rsizeField = new JTextField();
+		rsizeField.setEditable(false);
+		rsizeField.setForeground(new Color(240, 248, 255));
+		rsizeField.setBackground(new Color(119, 136, 153));
+		rsizeField.setColumns(10);
+		
+		priceField = new JTextField();
+		priceField.setEnabled(false);
+		priceField.setForeground(new Color(240, 248, 255));
+		priceField.setBackground(new Color(119, 136, 153));
+		priceField.setColumns(10);
+		
+		JLabel lblRoomSize = new JLabel("Room size");
+		lblRoomSize.setHorizontalAlignment(SwingConstants.CENTER);
+		lblRoomSize.setForeground(new Color(119, 136, 153));
+		lblRoomSize.setFont(new Font("Times New Roman", Font.PLAIN, 13));
+		
+		JLabel lblPrice = new JLabel("Price");
+		lblPrice.setHorizontalAlignment(SwingConstants.CENTER);
+		lblPrice.setForeground(new Color(119, 136, 153));
+		lblPrice.setFont(new Font("Times New Roman", Font.PLAIN, 13));
 		GroupLayout gl_listPanel = new GroupLayout(listPanel);
 		gl_listPanel.setHorizontalGroup(
 			gl_listPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_listPanel.createSequentialGroup()
-					.addContainerGap(339, Short.MAX_VALUE)
+					.addContainerGap(539, Short.MAX_VALUE)
 					.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE))
 				.addGroup(gl_listPanel.createSequentialGroup()
 					.addGap(96)
-					.addGroup(gl_listPanel.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_listPanel.createParallelGroup(Alignment.TRAILING, false)
 						.addComponent(btnEnter, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGroup(Alignment.LEADING, gl_listPanel.createParallelGroup(Alignment.TRAILING, false)
-							.addComponent(lblNewLabel_5, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(listScroller, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)))
-					.addContainerGap(136, Short.MAX_VALUE))
+						.addComponent(lblNewLabel_5, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(listScroller, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))
+					.addGroup(gl_listPanel.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(Alignment.TRAILING, gl_listPanel.createSequentialGroup()
+							.addGap(18)
+							.addGap(18)
+							.addGroup(gl_listPanel.createParallelGroup(Alignment.TRAILING, false)
+								.addGroup(gl_listPanel.createSequentialGroup()
+									.addComponent(rsvScroller, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED))
+								.addComponent(detailsButton, 0, 0, Short.MAX_VALUE)
+								.addComponent(lblNewLabel_6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addGap(100))
+						.addGroup(gl_listPanel.createSequentialGroup()
+							.addGap(70)
+							.addGroup(gl_listPanel.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(lblRoomSize, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(rsizeField))
+							.addGap(18)
+							.addGroup(gl_listPanel.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(lblPrice, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(priceField))
+							.addGap(56))))
 		);
 		gl_listPanel.setVerticalGroup(
 			gl_listPanel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_listPanel.createSequentialGroup()
 					.addGap(92)
-					.addComponent(lblNewLabel_5)
+					.addGroup(gl_listPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNewLabel_5)
+						.addComponent(lblNewLabel_6))
 					.addGap(18)
-					.addComponent(listScroller, GroupLayout.PREFERRED_SIZE, 324, GroupLayout.PREFERRED_SIZE)
-					.addGap(4)
-					.addComponent(btnEnter, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+					.addGroup(gl_listPanel.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_listPanel.createSequentialGroup()
+							.addComponent(listScroller, GroupLayout.PREFERRED_SIZE, 324, GroupLayout.PREFERRED_SIZE)
+							.addGap(4)
+							.addComponent(btnEnter, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_listPanel.createSequentialGroup()
+							.addGroup(gl_listPanel.createParallelGroup(Alignment.LEADING)
+								.addGroup(gl_listPanel.createSequentialGroup()
+									.addComponent(rsvScroller, GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(detailsButton)
+									.addGap(22))
+								.addGroup(gl_listPanel.createSequentialGroup()
+									.addGap(91)
+									.addPreferredGap(ComponentPlacement.RELATED)))
+							.addGroup(gl_listPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblRoomSize)
+								.addComponent(lblPrice))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_listPanel.createParallelGroup(Alignment.BASELINE)
+								.addComponent(rsizeField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(priceField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(78)))
+					.addGap(24)
 					.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap())
 		);
+		
+		rsvModel = new DefaultListModel();
+		roomSizeOfResrv = new ArrayList<>();
+		pricesOfResrv = new ArrayList<>();
+		
+		for(Hotel h :hotels) {
+			
+			for(CustomersList cL :h.getCustomersList()) {
+				
+				System.out.println(h.getName() + " " + cL.getUsername());
+				if(cL.getUsername().equals(u.getUserName())) {
+					
+					rsvModel.addElement(h.getName());
+					roomSizeOfResrv.add(cL.getRoomSize());
+					pricesOfResrv.add(cL.getPricePaid());
+				}
+			}
+		}
+		
+		reservationsList = new JList(rsvModel);
+		reservationsList.setSelectionForeground(new Color(119, 136, 153));
+		reservationsList.setSelectionBackground(new Color(176, 196, 222));
+		reservationsList.setForeground(new Color(240, 248, 255));
+		reservationsList.setBorder(new LineBorder(new Color(176, 196, 222)));
+		reservationsList.setBackground(new Color(119, 136, 153));
+		reservationsList.setFont(new Font("Times New Roman", Font.PLAIN, 15));
+		rsvScroller.setViewportView(reservationsList);
 		listPanel.setLayout(gl_listPanel);
 		
-		
-		
+		if(rsvModel.isEmpty()) {
+			
+			rsvModel.addElement("No checkouts yet");
+			reservationsList.setSelectionModel(new NoSelectionModel());
+			reservationsList.setSelectionMode(new NoSelectionModel().SINGLE_INTERVAL_SELECTION);
+		}
 		
 		btnNewButton_2 = new JButton("X");
+		spr.putConstraint(SpringLayout.WEST, btnNewButton_2, 940, SpringLayout.WEST, contentPane);
 		btnNewButton_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnNewButton_2.setForeground(new Color(119, 136, 153));
 		btnNewButton_2.setBackground(new Color(176, 196, 222));
 		btnNewButton_2.setBorder(null);
 		spr.putConstraint(SpringLayout.NORTH, btnNewButton_2, 0, SpringLayout.NORTH, contentPane);
-		spr.putConstraint(SpringLayout.WEST, btnNewButton_2, 740, SpringLayout.WEST, contentPane);
 		spr.putConstraint(SpringLayout.SOUTH, btnNewButton_2, 0, SpringLayout.NORTH, listPanel);
 		spr.putConstraint(SpringLayout.EAST, btnNewButton_2, 0, SpringLayout.EAST, contentPane);
 		contentPane.add(btnNewButton_2);
 		
 		button = new JButton("-");
+		spr.putConstraint(SpringLayout.WEST, button, 892, SpringLayout.WEST, contentPane);
 		button.setVerticalTextPosition(SwingConstants.BOTTOM);
 		button.setForeground(new Color(119, 136, 153));
 		button.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -419,7 +534,6 @@ public class MainScreenGUI extends JFrame {
 		button.setBackground(new Color(176, 196, 222));
 		button.setBorder(null);
 		spr.putConstraint(SpringLayout.NORTH, button, 0, SpringLayout.NORTH, contentPane);
-		spr.putConstraint(SpringLayout.WEST, button, 692, SpringLayout.WEST, contentPane);
 		spr.putConstraint(SpringLayout.SOUTH, button, 0, SpringLayout.NORTH, listPanel);
 		spr.putConstraint(SpringLayout.EAST, button, 0, SpringLayout.WEST, btnNewButton_2);
 		contentPane.add(button);	
@@ -438,14 +552,14 @@ public class MainScreenGUI extends JFrame {
 		btnNewButton_1.addActionListener(e -> {
 			
 			int dialogButton = JOptionPane.YES_NO_OPTION;
-			int dialogResult = JOptionPane.showConfirmDialog(this, "Are you sure you want to Log out?", "Title on Box", dialogButton);
+			int dialogResult = JOptionPane.showConfirmDialog(this, "Are you sure you want to Log out?", "Travellers_Message", dialogButton);
 			
 			if(dialogResult == 0) {
 			 
 				this.setVisible(false);
 				this.dispose();
 				LogInGUI logInGUI = new LogInGUI();
-				logInGUI.run(users, null, hotels);
+				logInGUI.run(users, hotels);
 			}
 		});
 		
@@ -460,20 +574,22 @@ public class MainScreenGUI extends JFrame {
 		});
 		
 		
-		btnApply.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e)
-			{	
-				applicableHotels.clear();
+		btnApply.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {	
 				
+				applicableHotels.clear();
+			
 				city= (String) locationBox.getSelectedItem();
-				numberOfGuests = roomSizeBox.getSelectedIndex() + 1 ;
-				stars = starsBox.getSelectedIndex()+1;
+				numberOfGuests = roomSizeBox.getSelectedIndex() + 1;
+				stars = starsBox.getSelectedIndex() + 1;
 				extras[0] = rdbtnGym.isSelected() ? 1 : 0;
 				extras[1] = rdbtnPool.isSelected() ? 1 : 0;
 				extras[2] = rdbtnRestaurant.isSelected() ? 1 : 0;
 				extras[3] = rdbtnRestaurant.isSelected() ? 1 : 0;
 				extras[4] = rdbtnLunch.isSelected() ? 1 : 0;
 				applicableHotels = new ArrayList<>();
+				
 				for(Hotel h: hotels)
 					//int myInt = myBoolean ? 1 : 0;
 				{	int tempExtras[] = {0,0,0,0,0};
@@ -484,17 +600,19 @@ public class MainScreenGUI extends JFrame {
 					tempExtras[4] = h.hasLunch() ? 1 : 0;
 					boolean hasAllExtras = true;
 					
-				//			
-					if (h.getLocation()==city&&(h.GetAverageRating()>=avgRating||h.GetAverageRating()==0)&&pricePerNight>=h.getPriceFor(numberOfGuests)
-							&&h.getStars()>=stars&&(h.getAllRoomsFor(numberOfGuests)-h.getReservedRoomsFor(numberOfGuests)>0)) 
-					{		
-						for(int i=1; i<5; i++)
-						{
-							if(tempExtras[i]<extras[i])
-								hasAllExtras=false;
+					if(h.getLocation() == city && (h.GetAverageRating()>=avgRating || h.GetAverageRating() == 0) && pricePerNight >= h.getPriceFor(numberOfGuests) 
+							&& h.getStars() >= stars && (h.getAllRoomsFor(numberOfGuests) - h.getReservedRoomsFor(numberOfGuests) > 0)) {
+						
+						for(int i = 1; i < 5; i++) {
+							
+							if(tempExtras[i] < extras[i]) {
+								
+								hasAllExtras = false;
+							}
 						}
-						if(hasAllExtras)	
-						{
+						
+						if(hasAllExtras) {
+							
 							System.out.println(h.getName());
 							applicableHotels.add(h);
 						}
@@ -502,17 +620,18 @@ public class MainScreenGUI extends JFrame {
 				}
 
 				listModel.clear();
-				for(Hotel h: applicableHotels)
+				
+				for(Hotel h: applicableHotels) {
+				
 					listModel.addElement(h.getName());
-				
-				
+				}
 			}
 		});
 		
-		
-		btnEnter.addActionListener(e ->
-			{
-				for (Hotel h: applicableHotels) {
+		btnEnter.addActionListener(e -> {
+				
+			for(Hotel h: applicableHotels) {
+				
 				if(h.getName().equals(hotelList.getSelectedValue())) {
 					
 					this.setVisible(false);
@@ -523,60 +642,110 @@ public class MainScreenGUI extends JFrame {
 					break;
 				}
 			}
-			
-			});
+		});
 		
-
-		priceSlider.addChangeListener(new ChangeListener(){
+		detailsButton.addActionListener(e -> {
+			
+			if(rsvModel.get(0).equals("No checkouts yet")) {
+				
+				JOptionPane.showMessageDialog(this, "No ckeckouts to pick!", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
+			}
+			else {
+				
+				if(reservationsList.getSelectedValue() == null) {
+				
+					JOptionPane.showMessageDialog(this, "Select one of your checkouts first!", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
+				}
+				else {
+					
+					int hotelIndex = reservationsList.getSelectedIndex();
+			
+					rsizeField.setText(String.valueOf(roomSizeOfResrv.get(hotelIndex)));
+					priceField.setText(String.valueOf(pricesOfResrv.get(hotelIndex)));
+				}
+			}
+		});
+		
+		priceSlider.addChangeListener(new ChangeListener() {
+			
 			public void stateChanged(ChangeEvent e) {
-			    JSlider source = (JSlider)e.getSource();
-			    if (!source.getValueIsAdjusting()) {
+			    
+				JSlider source = (JSlider)e.getSource();
+			    if(!source.getValueIsAdjusting()) {
+			    	
 			    	pricePerNight = (int)source.getValue();
 			    	PriceF.setText(Integer.toString((int) pricePerNight));
-			        }
 			    }
-			});
+			}
+		});
 		
-		
-		ratingSlider.addChangeListener(new ChangeListener(){
+		ratingSlider.addChangeListener(new ChangeListener() {
+			
 			public void stateChanged(ChangeEvent e) {
+				
 			    JSlider source = (JSlider)e.getSource();
-			    if (!source.getValueIsAdjusting()) {
+			    if(!source.getValueIsAdjusting()) {
+			    	
 			    	avgRating = (int)source.getValue();
 			    	//priceF.setText(Double.toString(pricePerNight));
 			        }
 			    }
-			});
+		});
 		
-		
-		roomSizeBox.addActionListener(new ActionListener(){
+		roomSizeBox.addActionListener(new ActionListener() {
+			
 			public void actionPerformed(ActionEvent e) {
 				
-				maxp  =-1;
+				maxp  = -1;
 
-				numberOfGuests =roomSizeBox.getSelectedIndex() + 1;
-				for (Hotel h: hotels)
-				{	if(h.getPriceFor(numberOfGuests)>maxp)
-						maxp=(int) h.getPriceFor(numberOfGuests);
+				numberOfGuests = roomSizeBox.getSelectedIndex() + 1;
+				for(Hotel h: hotels) {
+					
+					if(h.getPriceFor(numberOfGuests) > maxp) {
+						
+						maxp = (int) h.getPriceFor(numberOfGuests);
+					}
 				}
 				maxp++;
 	            minp = maxp;
-	            for (Hotel h: hotels)
-	            {    if(h.getPriceFor(numberOfGuests)<minp)
-	                minp=(int) h.getPriceFor(numberOfGuests);
+	            
+	            for(Hotel h: hotels) {
+	            	
+	            	if(h.getPriceFor(numberOfGuests) < minp) {
+	            		
+	            		minp = (int) h.getPriceFor(numberOfGuests);
+	            	}
 	            }
 	            initp=(minp+maxp)/2;
 	            
 	            priceSlider.setMaximum(maxp);
 	            priceSlider.setMinimum(minp);
 	            priceSlider.setValue(initp);
-
-	            
-
 			}	
-			
-		});
-		
-		
+		});	
+	}
+	
+	private static class NoSelectionModel extends DefaultListSelectionModel {
+
+		   @Override
+		   public void setAnchorSelectionIndex(final int anchorIndex) {
+			   
+		   }
+
+		   @Override
+		   public void setLeadAnchorNotificationEnabled(final boolean flag) {
+			   
+		   }
+
+		   @Override
+		   public void setLeadSelectionIndex(final int leadIndex) {
+			   
+		   }
+
+		   @Override
+		   public void setSelectionInterval(final int index0, final int index1) { 
+			   
+			   super.setSelectionInterval(-1, -1);
+		   }
 	}
 }

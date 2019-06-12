@@ -1,6 +1,17 @@
-  Userame    |    Password    |       Name       |       LastName       |            Email            |
-  Zeles  |  fried  |  Alexandros  |  Papadopoulos  |  dai22022@uom.edu.gr  |
-  Swtys  |  deeper  |  Swthrhs  |  Siamaths  |  dai22167@uom.edu.gr  |
-  GiOne  |  Op  |  John  |  Wick  |  hdhdhdh@outlook.com  |
-  JJI  |  IED  |  Fire  |  Dj  |  bbvbfb  |
-  U  |  99  |  JJ  |  FF  |  b  |
+  Userame    |    Password    |       Name       |       LastName       |            Email            |     Status    |
+  Zeles  |  fried  |  Alexandros  |  Papadopoulos  |  dai22022@uom.edu.gr  |  U  |
+  Swtys  |  deeper  |  Swthrhs  |  Siamaths  |  dai22167@uom.edu.gr  |  A  |
+  GiOne  |  Op  |  John  |  Wick  |  hdhdhdh@outlook.com  |  U  |
+  Afratos  |  IED  |  Panagiwths  |  Nikas  |  bbvbfbh@outlook.com  |  U  |
+  Ionikos  |  uuu0  |  Kostas  |  Ksanthiwths  |  hdjdjdjd@gmail.com  |  U  |
+  Bio99  |  rtuyye  |  Diogenhs  |  Turnabiths  |  kdkdjd@gmail.com  |  U  |
+  aChatA  |  123456  |  Alexandros  |  Xatzhgewrgiou  |  achat_1@uom.edu.gr  |  A  |
+  aChatUser  |  654321  |  Alexandros  |  Xatzhgewrgiou  |  achat_2@uom.edu.gr  |  U  |
+  KwSioA  |  daiYo  |  Kwstas  |  Siozopoulos  |  dai18168_1@uom.edu.gr  |  A  |
+  KwSioUser  |  UIUI  |  Kwstas  |  Siozopoulos  |  dai18168_2@uom.edu.gr  |  U  |
+  BiLLA  |  JJJJI  |  Vasilhs  |  Zembilas  |  dai17082_1@uom.edu.gr  |  A  |
+  BiLLUser  |  JjduI  |  Vasilhs  |  Zembilas  |  dai17082_2@uom.edu.gr  |  U  |
+  ChrsA  |  iopoi  |  Xristos  |  Deretzhs  |  dai18039_1@uom.edu.gr  |  A  |
+  ChrsUser  |  odpd  |  Xristos  |  Deretzhs  |  dai18039_2@uom.edu.gr  |  U  |
+  TriantafA  |  udiid  |  Triantafyllos  |  Tsiakirhs  |  dai18..._1@uom.edu.gr  |  A  |
+  TriantafUser  |  jfjff22  |  Triantafyllos  |  Tsiakirhs  |  dai18..._2@uom.edu.gr  |  U  |

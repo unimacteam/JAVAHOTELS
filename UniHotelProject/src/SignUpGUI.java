@@ -58,6 +58,7 @@ public class SignUpGUI extends JFrame {
 	private String email = "";
 	private String name = "";
 	private String surname = "";
+	private String status = "";
 	private JLabel lblNewLabel_1;
 	
 	//Just for creating the SignUpGUI object
@@ -271,13 +272,15 @@ public class SignUpGUI extends JFrame {
 			email = emailTextField.getText().trim();
 			name = nameTextField.getText().trim();
 			surname = surnameTextField.getText().trim();
+			status = "U";
 			
 			if(this.SignUp(users)) {
 		
 				this.setVisible(false);
 				this.dispose();
+				JOptionPane.showMessageDialog(this, "User " + userName + " has successfully registered!", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
 				LogInGUI logInGUI = new LogInGUI();
-				logInGUI.run(users, null, hotels);
+				logInGUI.run(users, hotels);
 			}
 		});
 		
@@ -286,7 +289,7 @@ public class SignUpGUI extends JFrame {
 			this.setVisible(false);
 			this.dispose();
 			LogInGUI logInGUI = new LogInGUI();
-			logInGUI.run(users, null, hotels);
+			logInGUI.run(users, hotels);
 		});
 		
 		closeButton.addActionListener(e -> {
@@ -328,29 +331,43 @@ public class SignUpGUI extends JFrame {
 				inUseUserE = true;
 				break;
 			}
-			}
-		if (name.equals(""))
+		}
+		
+		if (name.equals("")) {
+			
 			emptyFields.add("NAME");
-		if (surname.equals(""))
+		}
+		
+		if (surname.equals("")) {
+		
 			emptyFields.add("SURNAME");
-		if (userName.equals(""))
+		}
+		
+		if (userName.equals("")) {
+		
 			emptyFields.add("USERNAME");
-		if (email.equals(""))
+		}
+		
+		if (email.equals("")) {
+			
 			emptyFields.add("EMAIL");
-		if (passCode.equals(""))
+		}
+		
+		if (passCode.equals("")) {
+			
 			emptyFields.add("PASSWORD");
-	
+		}
 		
-		if (!emptyFields.isEmpty())
+		if (!emptyFields.isEmpty()) {
+			
 			EmptyFieldsPopUp(emptyFields);
-		
+		}
 		
 		//if everything ok, register new user
 		if (!inUseUserN && !inUseUserE && emptyFields.isEmpty()) {
 			
-			User newUser = new User(userName, passCode, email, name, surname); 
+			User newUser = new User(userName, passCode, email, name, surname, status); 
 			users.add(newUser);
-			JOptionPane.showMessageDialog(this, "Sign Up successful!");
 			WriteUsersDataInFile(newUser);
 			signUpSuccessful = true;
 		}
@@ -379,7 +396,7 @@ public class SignUpGUI extends JFrame {
 		
 		if(!(usernameTextField.getText()=="")) {
 			
-			JOptionPane.showMessageDialog(null, "Username already in use!");
+			JOptionPane.showMessageDialog(this, "Username already in use!",  "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
 		}
 		
 	}
@@ -387,19 +404,20 @@ public class SignUpGUI extends JFrame {
 		
 		if(!(emailTextField.getText()=="")) {
 			
-			JOptionPane.showMessageDialog(null, "Email already in use!");
+			JOptionPane.showMessageDialog(this, "Email already in use!",  "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 	
-public void EmptyFieldsPopUp(ArrayList<String> EmptyFields) {
+	public void EmptyFieldsPopUp(ArrayList<String> EmptyFields) {
 			
-	String message = new String("The following fields are empty:\n");
+		String message = new String("The following fields are empty:\n");
 	
-	for(String s: EmptyFields)
-		message += s + "\n";
-	JOptionPane.showMessageDialog(null, message);
+		for(String s :EmptyFields) {
+			
+			message += s + "\n";
+		}
 		
-		
+		JOptionPane.showMessageDialog(this, message, "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	public User GetUserThatWantsToSignUp() {

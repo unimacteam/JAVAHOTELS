@@ -18,11 +18,11 @@ public class Main {
 		}
 		
 		//users and active users array needed, active users can be created on launch. Use // to run main without this.
-		//LogInGUI logInGUI = new LogInGUI();
-		//logInGUI.run(users, hotels);
+		LogInGUI logInGUI = new LogInGUI();
+		logInGUI.run(users, hotels);
 	
-		MainScreenGUI k1 = new MainScreenGUI();
-		k1.run(hotels, users, users.get(0));
+		//MainScreenGUI k1 = new MainScreenGUI();
+		//k1.run(hotels, users, users.get(0));
 		
 		//AdminScreenGUI k2 = new AdminScreenGUI();
 		//k2.run(hotels, users);

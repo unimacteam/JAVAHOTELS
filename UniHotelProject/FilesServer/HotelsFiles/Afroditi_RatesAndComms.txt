@@ -1,2 +1,3 @@
   User    |    Rating    |      Comment      |
   Zeles  |  4  |  $This is a great Hotel!!$  |
+  thzempilas  |  3  |  $$  |

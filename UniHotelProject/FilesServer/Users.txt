@@ -13,5 +13,6 @@
   BiLLUser  |  JjduI  |  Vasilhs  |  Zembilas  |  dai17082_2@uom.edu.gr  |  U  |
   ChrsA  |  iopoi  |  Xristos  |  Deretzhs  |  dai18039_1@uom.edu.gr  |  A  |
   ChrsUser  |  odpd  |  Xristos  |  Deretzhs  |  dai18039_2@uom.edu.gr  |  U  |
-  TriantafA  |  udiid  |  Triantafyllos  |  Tsiakirhs  |  dai18..._1@uom.edu.gr  |  A  |
-  TriantafUser  |  jfjff22  |  Triantafyllos  |  Tsiakirhs  |  dai18..._2@uom.edu.gr  |  U  |
+  TriantafA  |  udiid  |  Triantafyllos  |  Tsiakirhs  |  dai18085_1@uom.edu.gr  |  A  |
+  TriantafUser  |  jfjff22  |  Triantafyllos  |  Tsiakirhs  |  dai18085_2@uom.edu.gr  |  U  |
+  thzempilas  |  540218tz  |  theodor  |  zempilas  |  thzempilas@gmail.com  |  U  |

@@ -480,7 +480,6 @@ import javax.swing.border.MatteBorder;
 				}
 			});
 			
-		
 			enterBtn = new JButton("Enter");
 			enterBtn.setForeground(new Color(112, 128, 144));
 			enterBtn.setFont(new Font("Times New Roman", Font.PLAIN, 13));
@@ -579,27 +578,27 @@ import javax.swing.border.MatteBorder;
 					extras.add(breakfast);
 					extras.add(lunch);
 					
-					boolean noOtherLikeThat = true;
+					boolean noOtherLikeThat = false;
 					
 					h = new Hotel(name, location, street, rPriceList, roomsList, resRoomsList, stars, extras);
 					for(Hotel h1 :hotels) {
 						
-						if(!h1.getName().equals(h.getName())) {
-							
-							
-						}
-						else {
-							
-							noOtherLikeThat = false;
+						System.out.println(h1.getName() + " " + h.getName());
+						if(h1.getName().equals(h.getName())) {
+
+							System.out.println("In");
+							noOtherLikeThat = true;
 							break;
 						}
 					}
 					
-					if(noOtherLikeThat) {
+					if(!noOtherLikeThat) {
 						
+						hotels.add(h);
 						h.WriteDetailsOfThisHotel(h, details);
 						WriteToHotelsTxtFile();
 						JOptionPane.showMessageDialog(this, "Hotel " + h.getName() + " has registered!", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
+						
 					}
 					else {
 						
@@ -668,7 +667,7 @@ import javax.swing.border.MatteBorder;
 				
 				System.out.println("In");
 				BufferedWriter bw1 = new BufferedWriter(new FileWriter(fileHotel, true));
-				bw1.append("  " + name + "  |  " + location + "  |  " + street + "  |  " + r1Price + " , " + r2Price + " , " + r3Price 
+				bw1.append(System.lineSeparator() + "  " + name + "  |  " + location + "  |  " + street + "  |  " + r1Price + " , " + r2Price + " , " + r3Price 
 						   + " , " + r4Price + "  |  " + rooms1 + " , " + rooms2 + " , " + rooms3 + " , " + rooms4 + "  |  $" + rsvRoom1 + " , " + rsvRoom2 
 						   + " , " + rsvRoom3 + " , " + rsvRoom4 + "$  |  " + stars + "  |  " + pool + "  |  " + gym + "  |  " + restaurant 
 						   + "  |  " + breakfast + "  |  " + lunch + "  |  ");

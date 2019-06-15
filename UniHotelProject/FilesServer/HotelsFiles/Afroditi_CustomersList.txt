@@ -1,2 +1,3 @@
   CustomerUserName   |    CustomerFullName    |    Email    |    RoomSize    |    FinalPrice    |
   Zeles  |  Papadopoulos Alexandros  |  dai22022@uom.edu.gr  |  3  |  195.0  |
+  thzempilas  |  zempilas theodor  |  thzempilas@gmail.com  |  3  |  195.0  |

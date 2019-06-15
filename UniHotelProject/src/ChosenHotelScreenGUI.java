@@ -30,6 +30,7 @@ public class ChosenHotelScreenGUI extends JFrame {
 	private ArrayList<User> users = new ArrayList<>();
 	private Hotel h;
 	private User u;
+	private JLabel avgRLbl;
 	private JButton backBtn;
 	private JButton xBtn;
 	private JButton btnNewButton;
@@ -382,7 +383,7 @@ public class ChosenHotelScreenGUI extends JFrame {
 		starLabel.setFont(new Font("Times New Roman", Font.PLAIN, 17));
 		contentPane.add(starLabel);
 		
-		JLabel avgRLbl = new JLabel("Average rating: " + h.GetAverageRating());
+		avgRLbl = new JLabel("Average rating: " + h.GetAverageRating());
 		sl_contentPane.putConstraint(SpringLayout.WEST, avgRLbl, 6, SpringLayout.EAST, locLbl);
 		sl_contentPane.putConstraint(SpringLayout.EAST, avgRLbl, -150, SpringLayout.EAST, contentPane);
 		sl_contentPane.putConstraint(SpringLayout.NORTH, avgRLbl, 0, SpringLayout.NORTH, strLbl);
@@ -725,7 +726,7 @@ public class ChosenHotelScreenGUI extends JFrame {
 					comment.set(f, uComment);
 				}
 				else {
-					
+				
 					if(firstRate) {
 						
 						ratesList.clear();
@@ -743,6 +744,7 @@ public class ChosenHotelScreenGUI extends JFrame {
 			}
 			
 			h.ReadTheRatingsFromTxtFile();
+			avgRLbl.setText("Average rating: " + h.GetAverageRating());
 		});
 		
 		xBtn.addActionListener(e -> {

@@ -1,1 +1,3 @@
   User    |    Rating    |      Comment      |
+  thzempilas  |  5  |  $NICE HOTEL$  |
+  Zeles  |  5  |  $I didnt like it$  |

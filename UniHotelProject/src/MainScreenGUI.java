@@ -566,72 +566,88 @@ public class MainScreenGUI extends JFrame {
 		});
 		
 		
-		btnApply.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {	
+		btnApply.addActionListener(e -> {	
 				
-				applicableHotels.clear();
+			applicableHotels.clear();
 			
-				city= (String) locationBox.getSelectedItem();
-				numberOfGuests = roomSizeBox.getSelectedIndex() + 1;
-				stars = starsBox.getSelectedIndex() + 1;
-				extras[0] = rdbtnGym.isSelected() ? 1 : 0;
-				extras[1] = rdbtnPool.isSelected() ? 1 : 0;
-				extras[2] = rdbtnRestaurant.isSelected() ? 1 : 0;
-				extras[3] = rdbtnRestaurant.isSelected() ? 1 : 0;
-				extras[4] = rdbtnLunch.isSelected() ? 1 : 0;
-				applicableHotels = new ArrayList<>();
+			city= (String) locationBox.getSelectedItem();
+			numberOfGuests = roomSizeBox.getSelectedIndex() + 1;
+			stars = starsBox.getSelectedIndex() + 1;
+			extras[0] = rdbtnGym.isSelected() ? 1 : 0;
+			extras[1] = rdbtnPool.isSelected() ? 1 : 0;
+			extras[2] = rdbtnRestaurant.isSelected() ? 1 : 0;
+			extras[3] = rdbtnRestaurant.isSelected() ? 1 : 0;
+			extras[4] = rdbtnLunch.isSelected() ? 1 : 0;
+			applicableHotels = new ArrayList<>();
 				
-				for(Hotel h: hotels)
-					//int myInt = myBoolean ? 1 : 0;
-				{	
-					int tempExtras[] = {0,0,0,0,0};
-					tempExtras[0] = h.hasAGym() ? 1 : 0;
-					tempExtras[1] = h.hasAPool() ? 1 : 0;
-					tempExtras[2] = h.hasARestaurant() ? 1 : 0;
-					tempExtras[3] = h.hasBreakfast() ? 1 : 0;
-					tempExtras[4] = h.hasLunch() ? 1 : 0;
-					boolean hasAllExtras = true;
+			for(Hotel h: hotels)
+			//int myInt = myBoolean ? 1 : 0;
+			{	
+				int tempExtras[] = {0,0,0,0,0};
+				tempExtras[0] = h.hasAGym() ? 1 : 0;
+				tempExtras[1] = h.hasAPool() ? 1 : 0;
+				tempExtras[2] = h.hasARestaurant() ? 1 : 0;
+				tempExtras[3] = h.hasBreakfast() ? 1 : 0;
+				tempExtras[4] = h.hasLunch() ? 1 : 0;
+				boolean hasAllExtras = true;
 					
-					if(h.getLocation() == city && (h.GetAverageRating()>=avgRating || h.GetAverageRating() == 0) && pricePerNight >= h.getPriceFor(numberOfGuests) 
-							&& h.getStars() >= stars && (h.getAllRoomsFor(numberOfGuests) - h.getReservedRoomsFor(numberOfGuests) > 0)) {
+				if(h.getLocation().equals(city) && (h.GetAverageRating()>=avgRating || h.GetAverageRating() == 0) && pricePerNight >= h.getPriceFor(numberOfGuests) 
+					&& h.getStars() >= stars && (h.getAllRoomsFor(numberOfGuests) - h.getReservedRoomsFor(numberOfGuests) > 0)) {
 						
-						for(int i = 1; i < 5; i++) {
-							
-							if(tempExtras[i] < extras[i]) {
+					for(int i = 1; i < 5; i++) {
+						
+						if(tempExtras[i] < extras[i]) {
 								
-								hasAllExtras = false;
-							}
-						}
-						
-						if(hasAllExtras) {
-	
-							applicableHotels.add(h);
+							hasAllExtras = false;
 						}
 					}
+						
+					if(hasAllExtras) {
+	
+						applicableHotels.add(h);
+					}
 				}
+			}
 
-				listModel.clear();
+			listModel.clear();
 				
-				for(Hotel h: applicableHotels) {
+			for(Hotel h: applicableHotels) {
 				
-					listModel.addElement(h.getName());
-				}
+				listModel.addElement(h.getName());
+			}
+				
+			if(applicableHotels.isEmpty()) {
+					
+				JOptionPane.showMessageDialog(this, "No hotels found with these filters!", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		
 		btnEnter.addActionListener(e -> {
 				
-			for(Hotel h: applicableHotels) {
+			if(!applicableHotels.isEmpty()) {
 				
-				if(h.getName().equals(hotelList.getSelectedValue())) {
+				for(Hotel h: applicableHotels) {
+				
+					if(hotelList.getSelectedValue() != null) {
 					
-					this.setVisible(false);
-					this.dispose();
-					ChosenHotelScreenGUI chosenHScrGUI = new ChosenHotelScreenGUI();
-					chosenHScrGUI.run(hotels, users, h, u);
-					break;
+						if(h.getName().equals(hotelList.getSelectedValue())) {
+					
+							this.setVisible(false);
+							this.dispose();
+							ChosenHotelScreenGUI chosenHScrGUI = new ChosenHotelScreenGUI();
+							chosenHScrGUI.run(hotels, users, h, u);
+							break;
+						}
+					}
+					else {
+				
+						JOptionPane.showMessageDialog(this, "Select one of the hotels first", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
+			}
+			else {
+				
+				JOptionPane.showMessageDialog(this, "There is no hotel to enter", "Travellers_Message", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		
